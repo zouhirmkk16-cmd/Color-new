@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battery Color Customizer | Pro Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #0d0e15;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        header {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        header h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            max-width: 800px;
+        }
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        .hero p {
+            color: #a0a5b5;
+            font-size: 1rem;
+            margin-bottom: 40px;
+        }
+        .preview-box {
+            background: #151722;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+        }
+        .battery-icon {
+            width: 100px;
+            height: 40px;
+            border: 3px solid #fff;
+            border-radius: 5px;
+            margin: 0 auto 20px;
+            position: relative;
+            padding: 2px;
+        }
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 15px;
+            background: #fff;
+            border-radius: 0 3px 3px 0;
+        }
+        .battery-level {
+            width: 80%;
+            height: 100%;
+            background: #4facfe; /* Default Color */
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .color-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .color-btn:hover {
+            transform: scale(1.1);
+        }
+        .color-btn.active {
+            border: 2px solid #fff;
+            transform: scale(1.1);
+        }
+        /* Color Options */
+        .c-blue { background: #4facfe; box-shadow: 0 0 10px #4facfe; }
+        .c-red { background: #ff0844; box-shadow: 0 0 10px #ff0844; }
+        .c-green { background: #00f260; box-shadow: 0 0 10px #00f260; }
+        .c-purple { background: #b122e5; box-shadow: 0 0 10px #b122e5; }
+
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(79, 172, 254, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+        .cta-btn:hover {
+            box-shadow: 0 5px 30px rgba(79, 172, 254, 0.7);
+            transform: translateY(-2px);
+        }
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 20px;
+            margin-bottom: 50px;
+        }
+        .feature-card {
+            background: #151722;
+            padding: 20px;
+            border-radius: 15px;
+            width: 250px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #4facfe;
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: #a0a5b5;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @media (max-width: 600px) {
+            .hero h2 { font-size: 1.8rem; }
+            .cta-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>BatteryColor™</h1>
+    </header>
+
+    <main class="hero">
+        <h2>Change Your Battery Color Instantly</h2>
+        <p>Customize your iPhone or Android battery icon with premium neon colors. No jailbreak or root required. 100% Safe.</p>
+
+        <div class="preview-box">
+            <p style="margin-bottom: 15px; font-weight: 600;">Live Preview</p>
+            
+            <div class="battery-icon">
+                <div class="battery-level" id="batteryLevel"></div>
+            </div>
+
+            <p style="margin-bottom: 10px; color: #a0a5b5; font-size: 0.9rem;">Select a color:</p>
+            
+            <div class="color-selector">
+                <div class="color-btn c-blue active" onclick="changeColor('#4facfe', this)"></div>
+                <div class="color-btn c-red" onclick="changeColor('#ff0844', this)"></div>
+                <div class="color-btn c-green" onclick="changeColor('#00f260', this)"></div>
+                <div class="color-btn c-purple" onclick="changeColor('#b122e5', this)"></div>
+            </div>
+
+            <!-- حط رابط الـ Content Locker ديالك فبلاصت الرابط لتحت -->
+            <a href="https://your-locker-link.com" class="cta-btn">Apply Color Now</a>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>🚀 Instant Apply</h3>
+                <p>Changes take effect immediately upon completion.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔒 100% Safe</h3>
+                <p>No downloads required. Works directly from your browser.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📱 iOS & Android</h3>
+                <p>Fully compatible with all major devices and software versions.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // سكربت بسيط باش اليوزر يجرب الألوان ويبان داكشي حقيقي
+        function changeColor(color, element) {
+            // تبديل لون البطارية
+            document.getElementById('batteryLevel').style.background = color;
+            document.getElementById('batteryLevel').style.boxShadow = `0 0 15px ${color}`;
+            
+            // تحييد الـ active class من ڭاع الأزرار
+            let buttons = document.querySelectorAll('.color-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // إضافة الـ active class للزر اللي تبرك عليه
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
