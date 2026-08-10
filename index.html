@@ -3,231 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battery Color Customizer | Pro Tool</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Battery Customizer Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
+
         body {
-            background-color: #0d0e15;
+            background-color: #0b0f19;
             color: #ffffff;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
-        }
-        header {
-            width: 100%;
             padding: 20px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        header h1 {
-            font-size: 1.5rem;
-            background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+
+        .header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 700;
         }
-        .hero {
-            text-align: center;
-            padding: 50px 20px;
-            max-width: 800px;
-        }
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            line-height: 1.2;
-        }
-        .hero p {
-            color: #a0a5b5;
-            font-size: 1rem;
-            margin-bottom: 40px;
-        }
-        .preview-box {
-            background: #151722;
-            padding: 30px;
+
+        .status-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 6px 12px;
             border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .main-card {
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: #9ca3af;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* Battery Preview Component */
+        .preview-container {
+            background: #030712;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            margin-bottom: 40px;
         }
-        .battery-icon {
-            width: 100px;
-            height: 40px;
-            border: 3px solid #fff;
-            border-radius: 5px;
-            margin: 0 auto 20px;
+
+        .battery-wrapper {
+            width: 140px;
+            height: 60px;
+            border: 4px solid #ffffff;
+            border-radius: 12px;
+            margin: 0 auto;
+            padding: 4px;
             position: relative;
-            padding: 2px;
         }
-        .battery-icon::after {
+
+        .battery-wrapper::after {
             content: '';
             position: absolute;
-            right: -8px;
+            right: -12px;
             top: 50%;
             transform: translateY(-50%);
-            width: 5px;
-            height: 15px;
-            background: #fff;
-            border-radius: 0 3px 3px 0;
+            width: 6px;
+            height: 22px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
         }
-        .battery-level {
-            width: 80%;
-            height: 100%;
-            background: #4facfe; /* Default Color */
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-        .color-selector {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        .color-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .color-btn:hover {
-            transform: scale(1.1);
-        }
-        .color-btn.active {
-            border: 2px solid #fff;
-            transform: scale(1.1);
-        }
-        /* Color Options */
-        .c-blue { background: #4facfe; box-shadow: 0 0 10px #4facfe; }
-        .c-red { background: #ff0844; box-shadow: 0 0 10px #ff0844; }
-        .c-green { background: #00f260; box-shadow: 0 0 10px #00f260; }
-        .c-purple { background: #b122e5; box-shadow: 0 0 10px #b122e5; }
 
-        .cta-btn {
-            display: inline-block;
-            background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
-            color: #fff;
-            text-decoration: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(79, 172, 254, 0.4);
-            transition: all 0.3s ease;
+        .battery-fill {
+            width: 85%;
+            height: 100%;
+            background: #3b82f6;
+            border-radius: 6px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 15px #3b82f6;
+        }
+
+        /* Color Grid Selection */
+        .color-label {
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            animation: pulse 2s infinite;
+            color: #6b7280;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
-        .cta-btn:hover {
-            box-shadow: 0 5px 30px rgba(79, 172, 254, 0.7);
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .color-option {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .color-option:hover {
             transform: translateY(-2px);
         }
-        .features {
+
+        .color-option.active {
+            border-color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        /* Color Values */
+        .c-blue { background: #3b82f6; }
+        .c-purple { background: #8b5cf6; }
+        .c-pink { background: #ec4899; }
+        .c-red { background: #ef4444; }
+        .c-orange { background: #f97316; }
+        .c-green { background: #10b981; }
+        .c-cyan { background: #06b6d4; }
+        .c-yellow { background: #eab308; }
+
+        /* Action Button */
+        .activate-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            border: none;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .activate-btn:hover {
+            opacity: 0.95;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+        }
+
+        /* Modal / Popup Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             display: flex;
             justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
+            align-items: center;
             padding: 20px;
-            margin-bottom: 50px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
         }
-        .feature-card {
-            background: #151722;
-            padding: 20px;
-            border-radius: 15px;
-            width: 250px;
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-card {
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 35px 25px;
+            max-width: 450px;
+            width: 100%;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
         }
-        .feature-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: #4facfe;
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
         }
-        .feature-card p {
-            font-size: 0.9rem;
-            color: #a0a5b5;
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+
+        .modal-text {
+            color: #9ca3af;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
         }
-        @media (max-width: 600px) {
-            .hero h2 { font-size: 1.8rem; }
-            .cta-btn { width: 100%; text-align: center; }
+
+        .instruction-box {
+            background: #1f2937;
+            border-left: 4px solid #3b82f6;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.85rem;
+            color: #d1d5db;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .locker-link-btn {
+            display: block;
+            width: 100%;
+            background: #10b981;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: background 0.2s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .locker-link-btn:hover {
+            background: #059669;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .close-btn:hover {
+            color: #9ca3af;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>BatteryColor™</h1>
+    <header class="header">
+        <div class="logo">BATTERY CONTROL</div>
+        <div class="status-badge">SYSTEM READY</div>
     </header>
 
-    <main class="hero">
-        <h2>Change Your Battery Color Instantly</h2>
-        <p>Customize your iPhone or Android battery icon with premium neon colors. No jailbreak or root required. 100% Safe.</p>
+    <main class="main-card">
+        <h1 class="title">Battery Color Customizer</h1>
+        <p class="subtitle">Select your preferred accent color for your system battery indicator. Works on all operating systems without root or jailbreak.</p>
 
-        <div class="preview-box">
-            <p style="margin-bottom: 15px; font-weight: 600;">Live Preview</p>
-            
-            <div class="battery-icon">
-                <div class="battery-level" id="batteryLevel"></div>
+        <div class="preview-container">
+            <div class="battery-wrapper">
+                <div class="battery-fill" id="batteryFill"></div>
             </div>
+        </div>
 
-            <p style="margin-bottom: 10px; color: #a0a5b5; font-size: 0.9rem;">Select a color:</p>
+        <div class="color-label">Select Color Theme</div>
+        
+        <div class="color-grid">
+            <div class="color-option c-blue active" onclick="selectColor('#3b82f6', this)"></div>
+            <div class="color-option c-purple" onclick="selectColor('#8b5cf6', this)"></div>
+            <div class="color-option c-pink" onclick="selectColor('#ec4899', this)"></div>
+            <div class="color-option c-red" onclick="selectColor('#ef4444', this)"></div>
+            <div class="color-option c-orange" onclick="selectColor('#f97316', this)"></div>
+            <div class="color-option c-green" onclick="selectColor('#10b981', this)"></div>
+            <div class="color-option c-cyan" onclick="selectColor('#06b6d4', this)"></div>
+            <div class="color-option c-yellow" onclick="selectColor('#eab308', this)"></div>
+        </div>
+
+        <button class="activate-btn" onclick="openModal()">Activate Color</button>
+    </main>
+
+    <!-- Modal Popup -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card">
+            <h2 class="modal-title">Final Activation Step</h2>
+            <p class="modal-text">To apply this color configuration to your system interface permanently, a quick verification is required.</p>
             
-            <div class="color-selector">
-                <div class="color-btn c-blue active" onclick="changeColor('#4facfe', this)"></div>
-                <div class="color-btn c-red" onclick="changeColor('#ff0844', this)"></div>
-                <div class="color-btn c-green" onclick="changeColor('#00f260', this)"></div>
-                <div class="color-btn c-purple" onclick="changeColor('#b122e5', this)"></div>
+            <div class="instruction-box">
+                Complete <strong>1 free offer</strong> from the official verification page below. Once completed, your system configuration will automatically update.
             </div>
 
             <!-- حط رابط الـ Content Locker ديالك فبلاصت الرابط لتحت -->
-            <a href="https://your-locker-link.com" class="cta-btn">Apply Color Now</a>
-        </div>
+            <a href="https://your-locker-link.com" class="locker-link-btn">Complete 1 Offer To Activate</a>
 
-        <div class="features">
-            <div class="feature-card">
-                <h3>🚀 Instant Apply</h3>
-                <p>Changes take effect immediately upon completion.</p>
-            </div>
-            <div class="feature-card">
-                <h3>🔒 100% Safe</h3>
-                <p>No downloads required. Works directly from your browser.</p>
-            </div>
-            <div class="feature-card">
-                <h3>📱 iOS & Android</h3>
-                <p>Fully compatible with all major devices and software versions.</p>
-            </div>
+            <button class="close-btn" onclick="closeModal()">Cancel Procedure</button>
         </div>
-    </main>
+    </div>
 
     <script>
-        // سكربت بسيط باش اليوزر يجرب الألوان ويبان داكشي حقيقي
-        function changeColor(color, element) {
-            // تبديل لون البطارية
-            document.getElementById('batteryLevel').style.background = color;
-            document.getElementById('batteryLevel').style.boxShadow = `0 0 15px ${color}`;
-            
-            // تحييد الـ active class من ڭاع الأزرار
-            let buttons = document.querySelectorAll('.color-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            // إضافة الـ active class للزر اللي تبرك عليه
+        function selectColor(colorCode, element) {
+            const fill = document.getElementById('batteryFill');
+            fill.style.background = colorCode;
+            fill.style.boxShadow = `0 0 15px ${colorCode}`;
+
+            document.querySelectorAll('.color-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
             element.classList.add('active');
+        }
+
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
         }
     </script>
 </body>
