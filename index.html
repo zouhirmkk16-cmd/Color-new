@@ -120,6 +120,20 @@
             gap: 12px;
         }
 
+        .menu-bars-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 18px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .ai-brand {
             font-weight: 800;
             font-size: 20px;
@@ -184,6 +198,33 @@
             cursor: pointer;
         }
 
+        .nav-menu-dropdown {
+            position: absolute;
+            top: 68px;
+            left: 16px;
+            width: 220px;
+            background: var(--menu-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .menu-item {
+            padding: 14px 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-item i { color: var(--primary-accent); }
+
         .chat-history {
             flex: 1;
             overflow-y: auto;
@@ -197,7 +238,6 @@
         .chat-row { display: flex; gap: 12px; max-width: 100%; }
         .chat-row.user-row { flex-direction: row-reverse; }
 
-        /* Professional Battery AI Logo Icon */
         .bot-avatar {
             width: 40px;
             height: 40px;
@@ -261,6 +301,39 @@
         }
         .device-btn i { font-size: 24px; color: var(--primary-accent); }
         .device-btn:hover { border-color: var(--primary-accent); transform: translateY(-2px); }
+
+        .device-input-box {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            width: 100%;
+        }
+
+        .device-input-field {
+            flex: 1;
+            background: var(--chat-btn-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text-main);
+            font-size: 14px;
+            outline: none;
+            font-weight: 600;
+        }
+        .device-input-field:focus {
+            border-color: var(--primary-accent);
+        }
+
+        .device-submit-btn {
+            background: var(--primary-accent);
+            color: #ffffff;
+            border: none;
+            padding: 0 18px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 14px;
+        }
 
         .battery-preview-card {
             background: #0d1117;
@@ -429,6 +502,9 @@
     <div class="chat-container">
         <div class="chat-header">
             <div class="header-left">
+                <button class="menu-bars-btn" onclick="toggleNavMenu(event)">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
                 <div class="ai-brand">
                     <span>Battery</span><span class="part-highlight">AI</span>
                 </div>
@@ -442,12 +518,26 @@
                         <div class="lang-opt" onclick="selectLanguage('EN')">English</div>
                         <div class="lang-opt" onclick="selectLanguage('AR')">العربية</div>
                         <div class="lang-opt" onclick="selectLanguage('FR')">Français</div>
+                        <div class="lang-opt" onclick="selectLanguage('ES')">Español</div>
+                        <div class="lang-opt" onclick="selectLanguage('DE')">Deutsch</div>
                     </div>
                 </div>
                 <button class="theme-btn" onclick="toggleThemeNode()">
                     <i class="fa-solid fa-moon"></i>
                 </button>
             </div>
+        </div>
+
+        <div class="nav-menu-dropdown" id="navMenu">
+            <a href="https://support.apple.com" target="_blank" class="menu-item" id="menuApple">
+                <i class="fa-brands fa-apple"></i> Apple Support
+            </a>
+            <a href="https://support.google.com" target="_blank" class="menu-item" id="menuAndroid">
+                <i class="fa-brands fa-android"></i> Google Help
+            </a>
+            <a href="https://www.apple.com/legal/privacy/" target="_blank" class="menu-item" id="menuPrivacy">
+                <i class="fa-solid fa-user-shield"></i> Privacy Policy
+            </a>
         </div>
 
         <div class="live-status-bar">
@@ -497,28 +587,37 @@
         const translations = {
             EN: {
                 welcome: "Welcome to Battery Color AI Customizer. Please select your device operating system to build the custom display profile:",
-                deviceSet: "System connected for <strong>{device}</strong>. Please choose your preferred battery color accent from the live preview below:",
+                askModel: "Selected system: <strong>{device}</strong>. Please enter your device model name (e.g. iPhone 15 Pro, Samsung S24) to target display drivers:",
+                modelPlaceholder: "Enter phone model...",
+                modelBtn: "Next",
+                deviceSet: "Target device set to <strong>{model}</strong> ({device}). Choose your preferred battery color accent from the live preview below:",
                 lblActiveConn: "Active Users:",
                 lblConfigured: "Applied Today:",
                 applyBtn: "Apply Color Configuration",
-                buildingConfig: "Injecting color profile into device display framework:",
+                buildingConfig: "Injecting color profile into display framework for {model}:",
                 downloading: "Compiling system profile...",
-                log1: "Linking system display framework...",
-                log2: "Generating battery accent color matrix...",
-                log3: "Bypassing system interface lock...",
+                log1: "Linking display framework...",
+                log2: "Generating color matrix...",
+                log3: "Bypassing system lock...",
                 log4: "Creating auto-sync package...",
                 log5: "Color profile rendered successfully.",
                 verifyTitle: "Final Verification Step",
-                verifyDesc: "The custom battery color profile is ready. To apply it to your system permanently, <strong>complete 1 free offer</strong> below. The color will activate immediately upon completion.",
-                verifyBtn: "Complete 1 Offer To Activate"
+                verifyDesc: "The custom battery color profile for <strong>{model}</strong> is ready. To apply it to your system permanently, <strong>complete 1 free offer</strong> below.",
+                verifyBtn: "Complete 1 Offer To Activate",
+                menuApple: "Apple Support",
+                menuAndroid: "Google Help",
+                menuPrivacy: "Privacy Policy"
             },
             AR: {
                 welcome: "مرحباً بك في أداة تخصيص لون البطارية بالذكاء الاصطناعي. يرجى تحديد نظام تشغيل جهازك لبدء التهيئة:",
-                deviceSet: "تم الاتصال بنظام <strong>{device}</strong>. اختر لون البطارية المفضل لديك من المعاينة المباشرة أدناه:",
+                askModel: "النظام المحدد: <strong>{device}</strong>. يرجى إدخال اسم موديل هافتك (مثال: iPhone 15 Pro أو Samsung S24) لتحديد تعريفات الشاشة:",
+                modelPlaceholder: "أدخل موديل الهاتف...",
+                modelBtn: "التالي",
+                deviceSet: "تم تحديد الجهاز: <strong>{model}</strong> ({device}). اختر لون البطارية المفضل لديك من المعاينة المباشرة أدناه:",
                 lblActiveConn: "المستخدمون المتصلون:",
                 lblConfigured: "المفعلة اليوم:",
                 applyBtn: "تطبيق تكوين اللون",
-                buildingConfig: "جاري حقن ملف اللون في نظام عرض الجهاز:",
+                buildingConfig: "جاري حقن ملف اللون في نظام العرض لجهاز {model}:",
                 downloading: "جاري تجميع الملف...",
                 log1: "ربط إطار عمل عرض النظام...",
                 log2: "إنشاء مصفوفة لون البطارية...",
@@ -526,30 +625,86 @@
                 log4: "إنشاء حزمة التزامن التلقائي...",
                 log5: "تم تجهيز ملف اللون بنجاح.",
                 verifyTitle: "خطوة التفعيل النهائية",
-                verifyDesc: "ملف لون البطارية المخصص جاهز. لتطبيقه على جهازك بشكل دائم، يرجى <strong>إكمال عرض واحد مجاني</strong> أدناه لتفعيل اللون فوراً.",
-                verifyBtn: "إكمال عرض واحد للتفعيل"
+                verifyDesc: "ملف لون البطارية المخصص لجهاز <strong>{model}</strong> جاهز. لتطبيقه بشكل دائم، يرجى <strong>إكمال عرض واحد مجاني</strong> أدناه لتفعيل اللون فوراً.",
+                verifyBtn: "إكمال عرض واحد للتفعيل",
+                menuApple: "دعم آبل",
+                menuAndroid: "مساعدة جوجل",
+                menuPrivacy: "سياسة الخصوصية"
             },
             FR: {
                 welcome: "Bienvenue sur Battery Color AI Customizer. Veuillez sélectionner votre système d'exploitation pour commencer:",
-                deviceSet: "Système connecté pour <strong>{device}</strong>. Choisissez votre couleur de batterie préférée ci-dessous:",
+                askModel: "Système sélectionné: <strong>{device}</strong>. Entrez le modèle de votre téléphone (ex: iPhone 15 Pro, Samsung S24):",
+                modelPlaceholder: "Modèle de téléphone...",
+                modelBtn: "Suivant",
+                deviceSet: "Appareil ciblé: <strong>{model}</strong> ({device}). Choisissez votre couleur de batterie ci-dessous:",
                 lblActiveConn: "Utilisateurs actifs:",
                 lblConfigured: "Appliqués aujourd'hui:",
                 applyBtn: "Appliquer la configuration",
-                buildingConfig: "Injection du profil de couleur dans le système d'affichage:",
+                buildingConfig: "Injection du profil de couleur pour {model}:",
                 downloading: "Compilation du profil système...",
                 log1: "Liaison du système d'affichage...",
-                log2: "Génération de la matrice de couleur...",
-                log3: "Contournement du verrou d'interface...",
-                log4: "Création du package de synchronisation...",
-                log5: "Profil de couleur généré avec succès.",
+                log2: "Génération de la matrice...",
+                log3: "Contournement du verrou...",
+                log4: "Création du package de synchro...",
+                log5: "Profil généré avec succès.",
                 verifyTitle: "Étape de vérification finale",
-                verifyDesc: "Le profil de couleur est prêt. Pour l'appliquer définitivement sur votre appareil, <strong>complétez 1 offre gratuite</strong> ci-dessous.",
-                verifyBtn: "Compléter 1 offre pour activer"
+                verifyDesc: "Le profil de couleur pour <strong>{model}</strong> est prêt. Pour l'appliquer définitivement, <strong>complétez 1 offre gratuite</strong> ci-dessous.",
+                verifyBtn: "Compléter 1 offre pour activer",
+                menuApple: "Support Apple",
+                menuAndroid: "Aide Google",
+                menuPrivacy: "Politique de confidentialité"
+            },
+            ES: {
+                welcome: "Bienvenido a Battery Color AI Customizer. Seleccione su sistema operativo para comenzar:",
+                askModel: "Sistema seleccionado: <strong>{device}</strong>. Ingrese el modelo de su teléfono (ej. iPhone 15 Pro, Samsung S24):",
+                modelPlaceholder: "Modelo de teléfono...",
+                modelBtn: "Siguiente",
+                deviceSet: "Dispositivo objetivo: <strong>{model}</strong> ({device}). Elija su color de batería preferido a continuación:",
+                lblActiveConn: "Usuarios activos:",
+                lblConfigured: "Aplicados hoy:",
+                applyBtn: "Aplicar configuración",
+                buildingConfig: "Inyectando perfil de color para {model}:",
+                downloading: "Compilando perfil...",
+                log1: "Viculando sistema...",
+                log2: "Generando matriz de color...",
+                log3: "Omitiendo bloqueo...",
+                log4: "Creando paquete...",
+                log5: "Perfil generado con éxito.",
+                verifyTitle: "Paso final de verificación",
+                verifyDesc: "El perfil de color para <strong>{model}</strong> está listo. Para aplicarlo permanentemente, <strong>complete 1 oferta gratis</strong>.",
+                verifyBtn: "Completar 1 oferta para activar",
+                menuApple: "Soporte Apple",
+                menuAndroid: "Ayuda Google",
+                menuPrivacy: "Política de privacidad"
+            },
+            DE: {
+                welcome: "Willkommen beim Battery Color AI Customizer. Wählen Sie Ihr Betriebssystem aus:",
+                askModel: "Ausgewähltes System: <strong>{device}</strong>. Geben Sie Ihr Telefonmodell ein (z. B. iPhone 15 Pro, Samsung S24):",
+                modelPlaceholder: "Telefonmodell eingeben...",
+                modelBtn: "Weiter",
+                deviceSet: "Zielgerät: <strong>{model}</strong> ({device}). Wählen Sie unten Ihre bevorzugte Akkufarbe aus:",
+                lblActiveConn: "Aktive Benutzer:",
+                lblConfigured: "Heute angewendet:",
+                applyBtn: "Farbe anwenden",
+                buildingConfig: "Farbprofil für {model} wird injiziert:",
+                downloading: "Systemprofil wird kompiliert...",
+                log1: "Anzeigesystem wird verknüpft...",
+                log2: "Farbmatrix wird generiert...",
+                log3: "Sperre wird umgangen...",
+                log4: "Paket wird erstellt...",
+                log5: "Farbprofil erfolgreich erstellt.",
+                verifyTitle: "Letzter Verifizierungsschritt",
+                verifyDesc: "Das Farbprofil für <strong>{model}</strong> ist bereit. Um es dauerhaft anzuwenden, <strong>schließen Sie 1 kostenloses Angebot ab</strong>.",
+                verifyBtn: "1 Angebot abschließen",
+                menuApple: "Apple Support",
+                menuAndroid: "Google Hilfe",
+                menuPrivacy: "Datenschutzrichtlinie"
             }
         };
 
         let currentLangCode = "EN";
         let selectedDevice = "";
+        let deviceModelName = "";
         let selectedColorHex = "#3b82f6";
 
         const chatWindow = document.getElementById('chatWindow');
@@ -560,8 +715,16 @@
             document.body.setAttribute('data-theme', currentTheme === 'light' ? 'dark' : 'light');
         }
 
+        function toggleNavMenu(e) {
+            e.stopPropagation();
+            document.getElementById('langDropdown').style.display = 'none';
+            const nav = document.getElementById('navMenu');
+            nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+        }
+
         function toggleLangDropdown(e) {
             e.stopPropagation();
+            document.getElementById('navMenu').style.display = 'none';
             const dd = document.getElementById('langDropdown');
             dd.style.display = dd.style.display === 'flex' ? 'none' : 'flex';
         }
@@ -575,11 +738,24 @@
             document.getElementById('lblActiveConn').innerText = dict.lblActiveConn;
             document.getElementById('lblConfigured').innerText = dict.lblConfigured;
 
+            document.getElementById('menuApple').innerHTML = `<i class="fa-brands fa-apple"></i> ${dict.menuApple}`;
+            document.getElementById('menuAndroid').innerHTML = `<i class="fa-brands fa-android"></i> ${dict.menuAndroid}`;
+            document.getElementById('menuPrivacy').innerHTML = `<i class="fa-solid fa-user-shield"></i> ${dict.menuPrivacy}`;
+
             const welcomeElem = document.querySelector('.txt-welcome');
             if (welcomeElem) welcomeElem.innerText = dict.welcome;
 
+            const askModelElem = document.querySelector('.txt-ask-model');
+            if (askModelElem) askModelElem.innerHTML = dict.askModel.replace('{device}', selectedDevice);
+
+            const modelInputElem = document.querySelector('.device-input-field');
+            if (modelInputElem) modelInputElem.placeholder = dict.modelPlaceholder;
+
+            const modelBtnElem = document.querySelector('.device-submit-btn');
+            if (modelBtnElem) modelBtnElem.innerText = dict.modelBtn;
+
             const deviceTextElem = document.querySelector('.txt-device-set');
-            if (deviceTextElem) deviceTextElem.innerHTML = dict.deviceSet.replace('{device}', selectedDevice);
+            if (deviceTextElem) deviceTextElem.innerHTML = dict.deviceSet.replace('{model}', deviceModelName).replace('{device}', selectedDevice);
 
             const applyBtnElem = document.querySelector('.action-confirm-btn');
             if (applyBtnElem) applyBtnElem.innerText = dict.applyBtn;
@@ -588,7 +764,7 @@
             if (verifyTitleElem) verifyTitleElem.innerText = dict.verifyTitle;
 
             const verifyDescElem = document.querySelector('.txt-verify-desc');
-            if (verifyDescElem) verifyDescElem.innerHTML = dict.verifyDesc;
+            if (verifyDescElem) verifyDescElem.innerHTML = dict.verifyDesc.replace('{model}', deviceModelName);
 
             const verifyBtnElem = document.querySelector('.txt-verify-btn');
             if (verifyBtnElem) verifyBtnElem.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${dict.verifyBtn}`;
@@ -630,7 +806,48 @@
                             </svg>
                         </div>
                         <div class="msg-bubble">
-                            <span class="txt-device-set">${dict.deviceSet.replace('{device}', device)}</span>
+                            <span class="txt-ask-model">${dict.askModel.replace('{device}', device)}</span>
+                            
+                            <div class="device-input-box">
+                                <input type="text" class="device-input-field" id="modelInput" placeholder="${dict.modelPlaceholder}" autocomplete="off">
+                                <button class="device-submit-btn" onclick="submitPhoneModel()">${dict.modelBtn}</button>
+                            </div>
+                        </div>
+                    `;
+                    chatWindow.appendChild(row);
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                    document.getElementById('modelInput').focus();
+                }, 800);
+            }, 400);
+        }
+
+        function submitPhoneModel() {
+            const input = document.getElementById('modelInput');
+            const val = input.value.trim();
+            if(!val) return;
+
+            deviceModelName = val;
+            input.disabled = true;
+            document.querySelector('.device-submit-btn').disabled = true;
+
+            appendUserMessage(val);
+
+            setTimeout(() => {
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    const dict = translations[currentLangCode];
+                    const row = document.createElement('div');
+                    row.className = 'chat-row ai-row';
+                    row.innerHTML = `
+                        <div class="bot-avatar">
+                            <svg class="battery-avatar-svg" viewBox="0 0 24 24">
+                                <path d="M16 4H8C6.34 4 5 5.34 5 7V17C5 18.66 6.34 20 8 20H16C17.66 20 19 18.66 19 17V7C19 5.34 17.66 4 16 4ZM17 17C17 17.55 16.55 18 16 18H8C7.45 18 7 17.55 7 17V7C7 6.45 7.45 6 8 6H16C16.55 6 17 6.45 17 7V17ZM11 2H13V4H11V2Z"/>
+                                <rect x="9" y="8" width="6" height="8" rx="1" fill="#3b82f6"/>
+                            </svg>
+                        </div>
+                        <div class="msg-bubble">
+                            <span class="txt-device-set">${dict.deviceSet.replace('{model}', deviceModelName).replace('{device}', selectedDevice)}</span>
                             
                             <div class="battery-preview-card">
                                 <div class="battery-wrapper">
@@ -687,7 +904,7 @@
                             </svg>
                         </div>
                         <div class="msg-bubble">
-                            ${dict.buildingConfig}
+                            ${dict.buildingConfig.replace('{model}', deviceModelName)}
                             
                             <div class="terminal-log-box" id="termBox" style="display:block;"></div>
                             
@@ -760,7 +977,7 @@
                                     <div class="offer-verification-card">
                                         <div class="verification-icon"><i class="fa-solid fa-lock"></i></div>
                                         <h4 class="txt-verify-title">${dict.verifyTitle}</h4>
-                                        <p class="txt-verify-desc">${dict.verifyDesc}</p>
+                                        <p class="txt-verify-desc">${dict.verifyDesc.replace('{model}', deviceModelName)}</p>
                                         <a href="https://appsave.online/cl/i/j7nvnv" class="locker-trigger-btn txt-verify-btn">
                                             <i class="fa-solid fa-check-circle"></i> ${dict.verifyBtn}
                                         </a>
@@ -777,6 +994,7 @@
 
         document.addEventListener('click', () => {
             document.getElementById('langDropdown').style.display = 'none';
+            document.getElementById('navMenu').style.display = 'none';
         });
     </script>
 </body>
