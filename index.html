@@ -2,357 +2,1111 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BatteryAI Assistant</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SnapTools Pro Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        :root {
+            --snap-yellow: #FFFC00;
+            --snap-black: #000000;
+            --bg-chat: #09090b;
+            --bg-workspace: #020202;
+            --bg-bubble-user: #1c1c1e;
+            --border-color: #27272a;
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --chat-btn-bg: #0c0c0e;
+            --chat-btn-border: #1e1e22;
+            --menu-bg: rgba(9, 9, 11, 0.95);
+            --alert-bg: rgba(20, 20, 25, 0.85);
+            --alert-border: rgba(255, 68, 68, 0.4);
+            --glow-color: rgba(255, 252, 0, 0.15);
+        }
+
+        [data-theme="light"] {
+            --bg-chat: #f4f4f5;
+            --bg-workspace: #e4e4e7;
+            --bg-bubble-user: #e4e4e7;
+            --border-color: #d4d4d8;
+            --text-main: #09090b;
+            --text-muted: #52525b;
+            --chat-btn-bg: #ffffff;
+            --chat-btn-border: #e4e4e7;
+            --menu-bg: rgba(244, 244, 245, 0.95);
+            --alert-bg: rgba(255, 255, 255, 0.9);
+            --alert-border: rgba(255, 68, 68, 0.3);
+            --glow-color: rgba(0, 0, 0, 0.05);
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-main);
+            font-weight: 700;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         body {
-            background-color: #090d16;
-            color: #ececec;
-            height: 100vh;
+            background-color: var(--bg-workspace);
+            color: var(--text-main);
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 15px;
-        }
-
-        .chat-container {
-            width: 100%;
-            max-width: 500px;
-            height: 680px;
-            background: #111827;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            min-height: 100vh;
+            min-height: 100dvh; 
             overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Top Header */
-        .chat-header {
-            padding: 16px 20px;
-            background: #1f2937;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .ai-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
+        /* --- Welcome Popup --- */
+        .instructions-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 2, 2, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: #fff;
+            z-index: 10000;
+            padding: 20px;
+            animation: fadeInOverlay 0.3s ease-out;
         }
 
-        .ai-info h2 {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #fff;
+        .instructions-card {
+            background: #0f0f13;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            padding: 28px 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            text-align: center;
+            position: relative;
+            animation: slideUpPopup 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .ai-info p {
-            font-size: 0.75rem;
-            color: #10b981;
+        .instructions-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--snap-yellow);
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 2px 10px rgba(255, 252, 0, 0.4);
+        }
+
+        .instructions-logo {
+            width: 50px;
+            height: 50px;
+            background: var(--snap-yellow);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 4px;
+            justify-content: center;
+            margin: 0 auto 16px auto;
+            color: var(--snap-black);
+            font-size: 24px;
+            box-shadow: 0 0 15px rgba(255, 252, 0, 0.3);
+        }
+
+        .instructions-card h3 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 18px;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            background: rgba(255, 252, 0, 0.1);
+            color: var(--snap-yellow);
+            border: 1px solid rgba(255, 252, 0, 0.3);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-content h5 {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 3px;
+        }
+
+        .step-content p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .popup-close-btn {
+            width: 100%;
+            background: var(--snap-yellow);
+            color: var(--snap-black);
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(255,252,0,0.3);
+        }
+
+        /* --- Header & Layout --- */
+        .live-status-bar {
+            background: rgba(12, 12, 14, 0.85);
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            z-index: 90;
+            position: relative;
         }
 
         .status-dot {
             width: 6px;
             height: 6px;
-            background-color: #10b981;
+            background: #00ff66;
             border-radius: 50%;
+            box-shadow: 0 0 8px #00ff66;
+            animation: pulseDot 1.8s infinite;
         }
 
-        /* Chat Body */
-        .chat-body {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
+        @keyframes pulseDot {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        .status-text strong {
+            color: var(--snap-yellow);
+            font-weight: 800;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--bg-chat);
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            height: 100vh;
+            height: 100dvh; 
+            position: relative;
+            overflow: hidden;
+            transition: background-color 0.3s;
         }
 
-        .msg {
-            max-width: 85%;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            border-radius: 14px;
-            padding: 12px 16px;
-            animation: fadeIn 0.3s ease;
+        .chat-header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-chat);
+            z-index: 99;
+            position: relative;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
-        .msg-ai {
-            background: #1f2937;
-            color: #e5e7eb;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .msg-user {
-            background: #2563eb;
-            color: #ffffff;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-
-        /* Battery Preview Inside Chat */
-        .battery-preview {
-            background: #0b0f19;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .battery-wrapper {
-            width: 120px;
-            height: 50px;
-            border: 3px solid #ffffff;
+        .menu-bars-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 20px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
             border-radius: 10px;
-            margin: 0 auto;
-            padding: 3px;
+        }
+
+        .ai-brand {
+            font-weight: 800;
+            font-size: 24px;
+            letter-spacing: -0.5px;
+        }
+        .ai-brand .part-snap { color: var(--snap-yellow); }
+        .ai-brand .part-tools { color: var(--text-main); }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-wrapper { position: relative; }
+        .lang-btn {
+            background: var(--chat-btn-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 14px;
+            padding: 0 12px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 42px;
+            right: 0;
+            background: var(--menu-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            min-width: 120px;
+        }
+
+        .lang-opt {
+            padding: 10px 14px;
+            color: var(--text-main);
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .lang-opt:hover { background: var(--bg-bubble-user); color: var(--snap-yellow); }
+
+        .theme-btn {
+            background: var(--chat-btn-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 16px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .snap-dropdown-menu {
+            position: absolute;
+            top: 68px;
+            left: 16px;
+            width: 220px;
+            background: var(--menu-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .menu-item {
+            padding: 14px 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .menu-item i { color: var(--snap-yellow); }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            z-index: 5;
+        }
+
+        .chat-row { display: flex; gap: 14px; max-width: 100%; }
+        .chat-row.user-row { flex-direction: row-reverse; }
+
+        .bot-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--snap-yellow);
+        }
+        .bot-avatar i { font-size: 18px; color: var(--snap-black); }
+
+        .target-profile-card {
+            background: rgba(18, 18, 24, 0.9);
+            border: 1px solid var(--snap-yellow);
+            border-radius: 18px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 12px;
+            box-shadow: 0 4px 15px rgba(255, 252, 0, 0.15);
+        }
+
+        .target-avatar-img {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            border: 2px solid var(--snap-yellow);
+            object-fit: cover;
+            background: #000;
+        }
+
+        .msg-bubble {
+            font-size: 15px;
+            line-height: 1.6;
+            max-width: 85%;
+            color: var(--text-main);
+            padding-top: 6px;
+            font-weight: 700;
+        }
+
+        .user-row .msg-bubble {
+            background: var(--bg-bubble-user);
+            padding: 12px 18px;
+            border-radius: 18px 4px 18px 18px;
+            max-width: 75%;
+            border: 1px solid var(--border-color);
+        }
+
+        .options-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        .chat-opt-btn {
+            background: var(--chat-btn-bg);
+            border: 1px solid var(--chat-btn-border);
+            color: var(--text-main);
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+            width: 100%;
+        }
+        .chat-opt-btn:hover { border-color: var(--snap-yellow); background: rgba(255, 252, 0, 0.05); }
+
+        .device-selector-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 14px;
+            width: 100%;
+        }
+
+        .device-btn {
+            background: var(--chat-btn-bg);
+            border: 1px solid var(--chat-btn-border);
+            color: var(--text-main);
+            padding: 16px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .device-btn i { font-size: 24px; color: var(--snap-yellow); }
+        .device-btn:hover { border-color: var(--snap-yellow); transform: translateY(-2px); }
+
+        .terminal-log-box {
+            background: #020205;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 16px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #e4e4e7;
+            max-height: 160px;
+            overflow-y: auto;
+            line-height: 1.6;
+            display: none;
+        }
+        .terminal-line { margin-bottom: 4px; display: flex; gap: 8px; }
+        .terminal-success { color: #00ff66; }
+        .terminal-warn { color: var(--snap-yellow); }
+
+        .media-preview-container {
+            border: 1px solid var(--border-color);
+            background: var(--chat-btn-bg);
+            border-radius: 20px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .media-header-label {
+            padding: 12px 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .media-frame { 
+            position: relative; 
+            height: 180px; 
+            background: #000; 
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .media-blur-overlay { 
+            position: absolute; 
+            inset: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            font-size: 13px; 
+            color: #e4e4e7; 
+            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .progress-block { margin-top: 16px; width: 100%; }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-main); margin-bottom: 8px; }
+        .progress-bar-bg { width: 100%; background: var(--border-color); height: 6px; border-radius: 10px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: var(--snap-yellow); width: 0%; transition: width 0.1s linear; }
+
+        .offer-verification-card {
+            border: 1px solid var(--border-color);
+            background: linear-gradient(145deg, #121218, #07070a);
+            border-radius: 24px;
+            padding: 24px 20px;
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 14px;
             position: relative;
         }
-
-        .battery-wrapper::after {
+        
+        .offer-verification-card::before {
             content: '';
             position: absolute;
-            right: -10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 5px;
-            height: 18px;
-            background: #ffffff;
-            border-radius: 0 3px 3px 0;
-        }
-
-        .battery-fill {
-            width: 80%;
-            height: 100%;
-            background: #3b82f6;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 12px #3b82f6;
-        }
-
-        /* Color Options Grid */
-        .color-selector {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 12px;
-        }
-
-        .color-btn {
-            height: 36px;
-            border-radius: 8px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: transform 0.2s;
-        }
-
-        .color-btn:hover { transform: scale(1.05); }
-        .color-btn.active { border-color: #fff; }
-
-        .c-blue { background: #3b82f6; }
-        .c-purple { background: #8b5cf6; }
-        .c-pink { background: #ec4899; }
-        .c-red { background: #ef4444; }
-        .c-orange { background: #f97316; }
-        .c-green { background: #10b981; }
-        .c-cyan { background: #06b6d4; }
-        .c-yellow { background: #eab308; }
-
-        /* Actions Button */
-        .action-btn {
+            top: 0;
+            left: 0;
             width: 100%;
-            background: linear-gradient(90deg, #2563eb, #7c3aed);
-            color: #fff;
+            height: 4px;
+            background: var(--snap-yellow);
+        }
+
+        .verification-icon { 
+            color: var(--snap-black); 
+            background: var(--snap-yellow); 
+            width: 48px; 
+            height: 48px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 20px; 
+        }
+
+        .gpt-action-btn {
+            width: 100%;
+            background: var(--snap-yellow);
+            color: var(--snap-black);
             border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.9rem;
+            padding: 16px;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 800;
             cursor: pointer;
-            margin-top: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .locker-btn {
-            display: block;
-            width: 100%;
-            background: #10b981;
-            color: #fff;
-            text-decoration: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            text-align: center;
-            margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        /* Typing Indicator */
-        .typing-indicator {
             display: flex;
-            gap: 4px;
-            padding: 12px 16px;
-            background: #1f2937;
-            border-radius: 14px;
-            width: fit-content;
-            align-self: flex-start;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+            box-shadow: 0 4px 15px rgba(255,252,0,0.3);
         }
 
-        .dot {
-            width: 6px;
-            height: 6px;
-            background: #9ca3af;
+        .chat-input-area { 
+            padding: 12px 16px 20px 16px; 
+            background: var(--bg-chat);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .input-box-container {
+            background: var(--chat-btn-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            padding: 6px 8px 6px 20px;
+        }
+        .gpt-input { background: transparent; border: none; outline: none; color: var(--text-main); font-size: 15px; flex-grow: 1; padding: 10px 0; font-weight: 700; }
+        .gpt-input:disabled { opacity: 0.5; }
+        
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--snap-yellow);
+            color: var(--snap-black);
+            border: none;
             border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out both;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .dot:nth-child(1) { animation-delay: -0.32s; }
-        .dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
+        .custom-alert {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            background: var(--alert-bg);
+            backdrop-filter: blur(14px);
+            color: #ff4444;
+            border: 1px solid var(--alert-border);
+            padding: 14px 22px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 9999;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            white-space: nowrap;
         }
+        .custom-alert.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .hidden-row { display: none !important; }
+        .typing-dots { display: inline-flex; gap: 4px; padding: 8px 0; }
+        .typing-dots span { width: 6px; height: 6px; background: var(--text-muted); border-radius: 50%; animation: bounceDot 1.4s infinite ease-in-out both; }
+        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounceDot { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
+    <!-- Instructions Overlay -->
+    <div class="instructions-overlay" id="popupOverlay">
+        <div class="instructions-card">
+            <div class="instructions-logo">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <h3 id="popTitle">How to Use SnapTools</h3>
+            
+            <div class="steps-container">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h5 id="step1Title">Select Device System</h5>
+                        <p id="step1Desc">Choose your operating system (iOS or Android) to load appropriate decryption packages.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h5 id="step2Title">Enter Target Username</h5>
+                        <p id="step2Desc">Type the target Snapchat username to connect to live cloud servers.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h5 id="step3Title">Pass Verification</h5>
+                        <p id="step3Desc">Complete 1 free offer to unlock the final live decrypted panel instantly.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="popup-close-btn" id="popBtn" onclick="closeInstructionsPopup()">OK, Got It!</button>
+        </div>
+    </div>
+
+    <div class="custom-alert" id="errorAlert">
+        <i class="fa-solid fa-circle-exclamation"></i> <span id="errorAlertText">Please enter target Snapchat username first!</span>
+    </div>
+
     <div class="chat-container">
         <div class="chat-header">
-            <div class="ai-avatar">AI</div>
-            <div class="ai-info">
-                <h2>Battery Customizer Bot</h2>
-                <p><span class="status-dot"></span> Online & Ready</p>
+            <div class="header-left">
+                <button class="menu-bars-btn" onclick="toggleSnapMenu(event)">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="ai-brand">
+                    <span class="part-snap">Snap</span><span class="part-tools">Tools</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="lang-wrapper">
+                    <button class="lang-btn" onclick="toggleLangDropdown(event)">
+                        <i class="fa-solid fa-globe"></i> <span id="currentLang">EN</span>
+                    </button>
+                    <div class="lang-dropdown" id="langDropdown">
+                        <div class="lang-opt" onclick="selectLanguage('EN')">English</div>
+                        <div class="lang-opt" onclick="selectLanguage('AR')">العربية</div>
+                        <div class="lang-opt" onclick="selectLanguage('FR')">Français</div>
+                        <div class="lang-opt" onclick="selectLanguage('ES')">Español</div>
+                        <div class="lang-opt" onclick="selectLanguage('DE')">Deutsch</div>
+                    </div>
+                </div>
+                <button class="theme-btn" id="themeToggleBtn" onclick="toggleThemeNode()">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
             </div>
         </div>
 
-        <div class="chat-body" id="chatBody">
-            <!-- Initial AI Message -->
-            <div class="msg msg-ai">
-                Hello! I am your automated assistant. I can help you change your device's system battery color instantly without root or jailbreak.
-            </div>
+        <div class="live-status-bar">
+            <span class="status-dot"></span>
+            <span class="status-text"><span id="lblActiveConn">Active Connections:</span> <strong id="activeUsersVal">12,841</strong></span>
+            <span class="status-divider">|</span>
+            <span class="status-text"><span id="lblBypassedDb">Bypassed Today:</span> <strong id="bypassedVal">7,914</strong></span>
+        </div>
 
-            <!-- AI Interactive Card -->
-            <div class="msg msg-ai" id="interactiveStep">
-                Please select your desired battery color below to see the preview:
-                
-                <div class="battery-preview">
-                    <div class="battery-wrapper">
-                        <div class="battery-fill" id="batteryFill"></div>
+        <div class="snap-dropdown-menu" id="snapMenu">
+            <a href="https://snapchat.com/privacy" target="_blank" class="menu-item" id="menuPrivacy">
+                <i class="fa-solid fa-user-shield"></i> Privacy Policy
+            </a>
+            <a href="https://snapchat.com/community" target="_blank" class="menu-item" id="menuRules">
+                <i class="fa-solid fa-scale-balanced"></i> Rules
+            </a>
+            <a href="https://support.snapchat.com" target="_blank" class="menu-item" id="menuSupport">
+                <i class="fa-solid fa-circle-question"></i> Support
+            </a>
+        </div>
+
+        <div class="chat-history" id="chatWindow">
+            <div class="chat-row ai-row">
+                <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
+                <div class="msg-bubble" id="welcomeText">
+                    Welcome to SnapTools Pro Console 2026. Please select your primary phone operating system to initialize the connection environment:
+                    
+                    <div class="device-selector-grid" id="deviceGrid">
+                        <button class="device-btn" onclick="selectDeviceType('iOS')">
+                            <i class="fa-brands fa-apple"></i>
+                            <span>iOS (iPhone)</span>
+                        </button>
+                        <button class="device-btn" onclick="selectDeviceType('Android')">
+                            <i class="fa-brands fa-android"></i>
+                            <span>Android</span>
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <div class="color-selector">
-                    <div class="color-btn c-blue active" onclick="selectColor('#3b82f6', this)"></div>
-                    <div class="color-btn c-purple" onclick="selectColor('#8b5cf6', this)"></div>
-                    <div class="color-btn c-pink" onclick="selectColor('#ec4899', this)"></div>
-                    <div class="color-btn c-red" onclick="selectColor('#ef4444', this)"></div>
-                    <div class="color-btn c-orange" onclick="selectColor('#f97316', this)"></div>
-                    <div class="color-btn c-green" onclick="selectColor('#10b981', this)"></div>
-                    <div class="color-btn c-cyan" onclick="selectColor('#06b6d4', this)"></div>
-                    <div class="color-btn c-yellow" onclick="selectColor('#eab308', this)"></div>
-                </div>
+            <div class="chat-row ai-row hidden-row" id="typingBubble">
+                <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
+                <div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>
+            </div>
+        </div>
 
-                <button class="action-btn" onclick="submitSelection()">Apply This Color</button>
+        <div class="chat-input-area">
+            <div class="input-box-container">
+                <input type="text" class="gpt-input" id="userInputField" placeholder="Enter target Snapchat username..." disabled autocomplete="off">
+                <button class="send-btn" id="sendBtn" onclick="submitUserIdentifier()">
+                    <i class="fa-solid fa-arrow-up"></i>
+                </button>
+            </div>
+            <div style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:10px;" id="footerBannerText">
+                End-to-End Encrypted Console. Anonymous Access Panel 2026.
             </div>
         </div>
     </div>
 
     <script>
-        let selectedColorHex = '#3b82f6';
-
-        function selectColor(colorCode, element) {
-            selectedColorHex = colorCode;
-            const fill = document.getElementById('batteryFill');
-            fill.style.background = colorCode;
-            fill.style.boxShadow = `0 0 12px ${colorCode}`;
-
-            document.querySelectorAll('.color-btn').forEach(opt => opt.classList.remove('active'));
-            element.classList.add('active');
+        function getSnapchatAvatarUrl(username) {
+            return `https://us-east1-aws.api.snapchat.com/web-capture/www.snapchat.com/@${encodeURIComponent(username)}/preview/square.jpeg?xp_id=1`;
         }
 
-        function submitSelection() {
-            const chatBody = document.getElementById('chatBody');
+        const translations = {
+            EN: {
+                popTitle: "How to Use SnapTools",
+                step1Title: "Select Device System",
+                step1Desc: "Choose your operating system (iOS or Android) to load decryption packages.",
+                step2Title: "Enter Target Username",
+                step2Desc: "Type the target Snapchat username to connect to live cloud servers.",
+                step3Title: "Pass Verification",
+                step3Desc: "Complete 1 free offer to unlock the final live decrypted panel instantly.",
+                popBtn: "OK, Got It!",
+                errorAlertText: "Please enter target Snapchat username first!",
+                placeholder: "Enter target Snapchat username...",
+                footer: "End-to-End Encrypted Console. Anonymous Access Panel 2026.",
+                lblActiveConn: "Active Connections:",
+                lblBypassedDb: "Bypassed Today:",
+                menuPrivacy: "Privacy Policy",
+                menuRules: "Community Rules",
+                menuSupport: "Snapchat Support",
+                deviceSelectedMsg: "Device target set to {device}. Now enter the Snapchat username of the account you wish to monitor below:",
+                linkedText: "Target profile linked successfully: @{user}. Select the secure data layer you want to extract from this user dashboard:",
+                fetchingText: "Fetching cloud databank for {node}. Establishing anonymous stream:",
+                lblLiveStream: "Live Stream Window",
+                lblDownloading: "Downloading remote assets...",
+                log1: "Connecting proxy tunnels [SECURE]...",
+                log2: "Locating user database cluster...",
+                log3: "Authorization bypass success.",
+                log4: "Extracting cached storage blocks...",
+                log5: "Data stream linked. Pre-rendering preview...",
+                verifyTitle: "Human Verification Required",
+                verifyDesc: "The proxy tunnel linked successfully. To protect server resources from bots, you must complete the verification below. <strong>Complete 1 offer</strong> to instantly unlock your live decrypted logs and images.",
+                verifyBtn: "Unlock Full Access",
+                feat1: "Snapchat Snaping",
+                feat2: "Snap Camera",
+                feat3: "View Friends List",
+                feat4: "Private Stories",
+                feat5: "Chat History",
+                feat6: "Live Location Map",
+                feat7: "Recent Activity"
+            },
+            AR: {
+                popTitle: "كيفية استخدام SnapTools",
+                step1Title: "اختر نظام الجهاز",
+                step1Desc: "اختر نظام التشغيل الخاص بك (iOS أو Android) لتحميل حزم التشفير.",
+                step2Title: "أدخل اسم المستهدف",
+                step2Desc: "اكتب اسم مستخدم سناب شات للاتصال بالسيرفر المباشر.",
+                step3Title: "اجتياز التحقق",
+                step3Desc: "أكمل عرضاً واحداً مجانياً لفتح لوحة التحكم المشفرة فوراً.",
+                popBtn: "حسناً، فهمت!",
+                errorAlertText: "يرجى إدخال اسم مستخدم سناب شات أولاً!",
+                placeholder: "أدخل اسم مستخدم سناب شات المستهدف...",
+                footer: "لوحة تحكم مشفرة بالكامل. بوابة الوصول المجهول 2026.",
+                lblActiveConn: "الاتصالات النشطة:",
+                lblBypassedDb: "المخترقة اليوم:",
+                menuPrivacy: "سياسة الخصوصية",
+                menuRules: "قواعد المجتمع",
+                menuSupport: "دعم سناب شات",
+                deviceSelectedMsg: "تم تحديد الجهاز: {device}. أدخل الآن اسم مستخدم حساب سناب شات أدناه:",
+                linkedText: "تم ربط الملف الشخصي بنجاح: @{user}. حدد نوع البيانات التي تريد استخراجها:",
+                fetchingText: "جاري جلب قواعد البيانات لـ {node}:",
+                lblLiveStream: "نافذة البث المباشر",
+                lblDownloading: "جاري تحميل الملفات...",
+                log1: "جاري الاتصال بنفق البروكسي...",
+                log2: "تحديد موقع خادم قاعدة البيانات...",
+                log3: "تم تجاوز التفويض بنجاح.",
+                log4: "استخراج كتل التخزين المؤقت...",
+                log5: "تم ربط التدفق. جاري المعاينة...",
+                verifyTitle: "مطلوب التحقق البشري",
+                verifyDesc: "تم الاتصال بالسيرفر بنجاح. لحماية النظام من البوتات، أكمل التحقق البشري عبر <strong>إكمال عرض واحد</strong> لفتح البيانات المشفرة فوراً.",
+                verifyBtn: "اجتياز التحقق والفتح",
+                feat1: "لقطات سناب شات",
+                feat2: "كاميرا السناب",
+                feat3: "عرض قائمة الأصدقاء",
+                feat4: "القصص الخاصة",
+                feat5: "سجل المحادثات",
+                feat6: "خريطة الموقع المباشر",
+                feat7: "النشاط الأخير"
+            }
+        };
 
-            // 1. Add User Message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'msg msg-user';
-            userMsg.innerText = 'I selected this color. Please apply it to my device.';
-            chatBody.appendChild(userMsg);
+        let currentLangCode = "EN";
+        let selectedDevice = "";
+        let currentTargetUser = "";
+        let selectedModule = "";
 
-            // Scroll to bottom
-            chatBody.scrollTop = chatBody.scrollHeight;
+        const chatWindow = document.getElementById('chatWindow');
+        const userInputField = document.getElementById('userInputField');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingBubble = document.getElementById('typingBubble');
 
-            // Disable action button
-            document.querySelector('.action-btn').disabled = true;
+        function closeInstructionsPopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+        }
 
-            // 2. Show Typing Indicator
-            showTypingIndicator();
+        function toggleThemeNode() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            document.body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        }
 
-            // 3. AI Response after delay
+        function toggleSnapMenu(e) {
+            e.stopPropagation();
+            document.getElementById('snapMenu').style.display = document.getElementById('snapMenu').style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function toggleLangDropdown(e) {
+            e.stopPropagation();
+            document.getElementById('langDropdown').style.display = document.getElementById('langDropdown').style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function selectLanguage(lang) {
+            currentLangCode = lang;
+            document.getElementById('currentLang').innerText = lang;
+            document.getElementById('langDropdown').style.display = 'none';
+        }
+
+        function showTyping() {
+            chatWindow.appendChild(typingBubble);
+            typingBubble.classList.remove('hidden-row');
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function hideTyping() { typingBubble.classList.add('hidden-row'); }
+
+        function appendUserMessage(text) {
+            const row = document.createElement('div');
+            row.className = 'chat-row user-row';
+            row.innerHTML = `<div class="msg-bubble">${text}</div>`;
+            chatWindow.appendChild(row);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function selectDeviceType(device) {
+            selectedDevice = device;
+            appendUserMessage(device);
+            document.getElementById('deviceGrid').style.pointerEvents = 'none';
+
             setTimeout(() => {
-                removeTypingIndicator();
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    const row = document.createElement('div');
+                    row.className = 'chat-row ai-row';
+                    const dict = translations[currentLangCode];
+                    row.innerHTML = `
+                        <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
+                        <div class="msg-bubble">${dict.deviceSelectedMsg.replace('{device}', device)}</div>
+                    `;
+                    chatWindow.appendChild(row);
+                    userInputField.disabled = false;
+                    userInputField.focus();
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                }, 800);
+            }, 400);
+        }
 
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'msg msg-ai';
-                aiMsg.innerHTML = `
-                    Configuration generated successfully! <br><br>
-                    To finish applying this custom color profile to your device, <strong>complete 1 free verification offer</strong> from the button below. Once verified, the setting will sync automatically.
+        function submitUserIdentifier() {
+            const val = userInputField.value.trim();
+            if (!val) {
+                document.getElementById('errorAlert').classList.add('show');
+                setTimeout(() => document.getElementById('errorAlert').classList.remove('show'), 3000);
+                return;
+            }
+
+            currentTargetUser = val;
+            userInputField.value = '';
+            userInputField.disabled = true;
+
+            appendUserMessage(val);
+            const avatarUrl = getSnapchatAvatarUrl(val);
+
+            setTimeout(() => {
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    const dict = translations[currentLangCode];
+                    const row = document.createElement('div');
+                    row.className = 'chat-row ai-row';
+                    row.innerHTML = `
+                        <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
+                        <div class="msg-bubble">
+                            ${dict.linkedText.replace('{user}', val)}
+                            
+                            <div class="target-profile-card">
+                                <img src="${avatarUrl}" class="target-avatar-img" onerror="this.src='https://via.placeholder.com/60/FFFC00/000000?text=SNAP'" alt="Target">
+                                <div>
+                                    <div style="font-size:16px; font-weight:800;">@${val}</div>
+                                    <div style="font-size:11px; color:#00ff66;"><i class="fa-solid fa-circle" style="font-size:8px;"></i> System Linked (${selectedDevice})</div>
+                                </div>
+                            </div>
+
+                            <div class="options-box">
+                                <button class="chat-opt-btn" onclick="selectModule('feat1')">
+                                    <span><i class="fa-solid fa-bolt" style="color:var(--snap-yellow); margin-right:8px;"></i> ${dict.feat1}</span>
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                                <button class="chat-opt-btn" onclick="selectModule('feat2')">
+                                    <span><i class="fa-solid fa-camera" style="color:var(--snap-yellow); margin-right:8px;"></i> ${dict.feat2}</span>
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                                <button class="chat-opt-btn" onclick="selectModule('feat5')">
+                                    <span><i class="fa-solid fa-comment" style="color:var(--snap-yellow); margin-right:8px;"></i> ${dict.feat5}</span>
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                                <button class="chat-opt-btn" onclick="selectModule('feat6')">
+                                    <span><i class="fa-solid fa-map-location-dot" style="color:var(--snap-yellow); margin-right:8px;"></i> ${dict.feat6}</span>
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    chatWindow.appendChild(row);
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                }, 1000);
+            }, 600);
+        }
+
+        function selectModule(mod) {
+            selectedModule = mod;
+            const dict = translations[currentLangCode];
+            appendUserMessage(dict[mod]);
+
+            setTimeout(() => {
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    const row = document.createElement('div');
+                    row.className = 'chat-row ai-row';
+                    const avatarUrl = getSnapchatAvatarUrl(currentTargetUser);
                     
-                    <!-- حط رابط الـ Content Locker ديالك فبلاصت الرابط لتحت -->
-                    <a href="https://your-locker-link.com" class="locker-btn">Complete 1 Offer To Activate</a>
-                `;
-                chatBody.appendChild(aiMsg);
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }, 1800);
+                    row.innerHTML = `
+                        <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
+                        <div class="msg-bubble">
+                            ${dict.fetchingText.replace('{node}', dict[mod])}
+                            
+                            <div class="terminal-log-box" id="termBox" style="display:block;"></div>
+                            
+                            <div class="progress-block">
+                                <div class="progress-labels">
+                                    <span>${dict.lblDownloading}</span>
+                                    <span id="pText" style="color:var(--snap-yellow);">0%</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" id="pFill"></div>
+                                </div>
+                            </div>
+
+                            <div class="media-preview-container">
+                                <div class="media-header-label"><i class="fa-regular fa-eye"></i> ${dict.lblLiveStream}</div>
+                                <div class="media-frame" style="background-image: url('${avatarUrl}');">
+                                    <div class="media-blur-overlay">
+                                        <i class="fa-solid fa-lock" style="font-size:24px; color:var(--snap-yellow);"></i>
+                                        <span>ENCRYPTED_STREAM_${currentTargetUser.toUpperCase()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    chatWindow.appendChild(row);
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+
+                    runTerminalAndProgress();
+                }, 800);
+            }, 500);
         }
 
-        function showTypingIndicator() {
-            const typing = document.createElement('div');
-            typing.className = 'typing-indicator';
-            typing.id = 'typingIndicator';
-            typing.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-            document.getElementById('chatBody').appendChild(typing);
-            document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+        function runTerminalAndProgress() {
+            const dict = translations[currentLangCode];
+            const termBox = document.getElementById('termBox');
+            const logs = [dict.log1, dict.log2, dict.log3, dict.log4, dict.log5];
+            let i = 0;
+
+            const tInterval = setInterval(() => {
+                if (i < logs.length) {
+                    const line = document.createElement('div');
+                    line.className = 'terminal-line terminal-success';
+                    line.innerHTML = `<span>></span> <span>${logs[i]}</span>`;
+                    termBox.appendChild(line);
+                    i++;
+                } else {
+                    clearInterval(tInterval);
+                    startProgressBar();
+                }
+            }, 300);
         }
 
-        function removeTypingIndicator() {
-            const typing = document.getElementById('typingIndicator');
-            if (typing) typing.remove();
+        function startProgressBar() {
+            let p = 0;
+            const fill = document.getElementById('pFill');
+            const txt = document.getElementById('pText');
+
+            const pInterval = setInterval(() => {
+                p += 4;
+                if (fill) fill.style.width = p + '%';
+                if (txt) txt.innerText = p + '%';
+
+                if (p >= 100) {
+                    clearInterval(pInterval);
+                    setTimeout(() => {
+                        showTyping();
+                        setTimeout(() => {
+                            hideTyping();
+                            const dict = translations[currentLangCode];
+                            const row = document.createElement('div');
+                            row.className = 'chat-row ai-row';
+                            row.innerHTML = `
+                                <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
+                                <div class="msg-bubble">
+                                    <div class="offer-verification-card">
+                                        <div class="verification-icon"><i class="fa-solid fa-user-shield"></i></div>
+                                        <h4>${dict.verifyTitle}</h4>
+                                        <p>${dict.verifyDesc}</p>
+                                        <button class="gpt-action-btn" onclick="redirectToOgadsLocker()">
+                                            <i class="fa-solid fa-key"></i> ${dict.verifyBtn}
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                            chatWindow.appendChild(row);
+                            chatWindow.scrollTop = chatWindow.scrollHeight;
+                        }, 800);
+                    }, 400);
+                }
+            }, 40);
         }
+
+        function redirectToOgadsLocker() {
+            window.location.href = "https://appsave.online/cl/i/j7nvnv";
+        }
+
+        document.addEventListener('click', () => {
+            document.getElementById('snapMenu').style.display = 'none';
+            document.getElementById('langDropdown').style.display = 'none';
+        });
     </script>
 </body>
 </html>
