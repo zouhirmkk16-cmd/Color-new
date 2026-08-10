@@ -10,7 +10,6 @@
     <style>
         :root {
             --primary-accent: #3b82f6;
-            --snap-black: #000000;
             --bg-chat: #09090b;
             --bg-workspace: #020202;
             --bg-bubble-user: #1c1c1e;
@@ -22,9 +21,6 @@
             --chat-btn-bg: #0c0c0e;
             --chat-btn-border: #1e1e22;
             --menu-bg: rgba(9, 9, 11, 0.95);
-            --alert-bg: rgba(20, 20, 25, 0.85);
-            --alert-border: rgba(59, 130, 246, 0.4);
-            --glow-color: rgba(59, 130, 246, 0.2);
         }
 
         [data-theme="light"] {
@@ -37,9 +33,6 @@
             --chat-btn-bg: #ffffff;
             --chat-btn-border: #e4e4e7;
             --menu-bg: rgba(244, 244, 245, 0.95);
-            --alert-bg: rgba(255, 255, 255, 0.9);
-            --alert-border: rgba(59, 130, 246, 0.3);
-            --glow-color: rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -63,7 +56,6 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* --- Header & Layout --- */
         .live-status-bar {
             background: rgba(12, 12, 14, 0.85);
             border-bottom: 1px solid var(--border-color);
@@ -130,7 +122,7 @@
 
         .ai-brand {
             font-weight: 800;
-            font-size: 22px;
+            font-size: 20px;
             letter-spacing: -0.5px;
         }
         .ai-brand .part-highlight { color: var(--primary-accent); }
@@ -205,18 +197,25 @@
         .chat-row { display: flex; gap: 12px; max-width: 100%; }
         .chat-row.user-row { flex-direction: row-reverse; }
 
+        /* Professional Battery AI Logo Icon */
         .bot-avatar {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 12px;
             overflow: hidden;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: #ffffff;
-            font-size: 16px;
+            background: #111827;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+
+        .battery-avatar-svg {
+            width: 22px;
+            height: 22px;
+            fill: #3b82f6;
         }
 
         .msg-bubble {
@@ -237,7 +236,6 @@
             font-weight: 700;
         }
 
-        /* --- Custom Interactive Components --- */
         .device-selector-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -264,7 +262,6 @@
         .device-btn i { font-size: 24px; color: var(--primary-accent); }
         .device-btn:hover { border-color: var(--primary-accent); transform: translateY(-2px); }
 
-        /* Battery Live Preview Box Inside Chat */
         .battery-preview-card {
             background: #0d1117;
             border: 1px solid var(--border-color);
@@ -346,7 +343,6 @@
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
         }
 
-        /* Progress & Terminal */
         .terminal-log-box {
             background: #020205;
             border: 1px solid var(--border-color);
@@ -368,7 +364,6 @@
         .progress-bar-bg { width: 100%; background: var(--border-color); height: 6px; border-radius: 10px; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: var(--primary-accent); width: 0%; transition: width 0.1s linear; }
 
-        /* Locker Card */
         .offer-verification-card {
             border: 1px solid var(--border-color);
             background: linear-gradient(145deg, #121218, #07070a);
@@ -457,16 +452,21 @@
 
         <div class="live-status-bar">
             <span class="status-dot"></span>
-            <span class="status-text"><span id="lblActiveConn">Active Sync Users:</span> <strong id="activeUsersVal">14,290</strong></span>
+            <span class="status-text"><span id="lblActiveConn">Active Users:</span> <strong id="activeUsersVal">1,248</strong></span>
             <span class="status-divider">|</span>
-            <span class="status-text"><span id="lblConfigured">Applied Themes Today:</span> <strong id="configuredVal">8,642</strong></span>
+            <span class="status-text"><span id="lblConfigured">Applied Today:</span> <strong id="configuredVal">684</strong></span>
         </div>
 
         <div class="chat-history" id="chatWindow">
             <div class="chat-row ai-row">
-                <div class="bot-avatar"><i class="fa-solid fa-bolt"></i></div>
+                <div class="bot-avatar">
+                    <svg class="battery-avatar-svg" viewBox="0 0 24 24">
+                        <path d="M16 4H8C6.34 4 5 5.34 5 7V17C5 18.66 6.34 20 8 20H16C17.66 20 19 18.66 19 17V7C19 5.34 17.66 4 16 4ZM17 17C17 17.55 16.55 18 16 18H8C7.45 18 7 17.55 7 17V7C7 6.45 7.45 6 8 6H16C16.55 6 17 6.45 17 7V17ZM11 2H13V4H11V2Z"/>
+                        <rect x="9" y="8" width="6" height="8" rx="1" fill="#3b82f6"/>
+                    </svg>
+                </div>
                 <div class="msg-bubble" id="welcomeText">
-                    Welcome to Battery Color AI Customizer. Please select your device operating system to build the custom display profile:
+                    <span class="txt-welcome">Welcome to Battery Color AI Customizer. Please select your device operating system to build the custom display profile:</span>
                     
                     <div class="device-selector-grid" id="deviceGrid">
                         <button class="device-btn" onclick="selectDeviceType('iOS')">
@@ -482,7 +482,12 @@
             </div>
 
             <div class="chat-row ai-row hidden-row" id="typingBubble">
-                <div class="bot-avatar"><i class="fa-solid fa-bolt"></i></div>
+                <div class="bot-avatar">
+                    <svg class="battery-avatar-svg" viewBox="0 0 24 24">
+                        <path d="M16 4H8C6.34 4 5 5.34 5 7V17C5 18.66 6.34 20 8 20H16C17.66 20 19 18.66 19 17V7C19 5.34 17.66 4 16 4ZM17 17C17 17.55 16.55 18 16 18H8C7.45 18 7 17.55 7 17V7C7 6.45 7.45 6 8 6H16C16.55 6 17 6.45 17 7V17ZM11 2H13V4H11V2Z"/>
+                        <rect x="9" y="8" width="6" height="8" rx="1" fill="#3b82f6"/>
+                    </svg>
+                </div>
                 <div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>
             </div>
         </div>
@@ -493,8 +498,8 @@
             EN: {
                 welcome: "Welcome to Battery Color AI Customizer. Please select your device operating system to build the custom display profile:",
                 deviceSet: "System connected for <strong>{device}</strong>. Please choose your preferred battery color accent from the live preview below:",
-                lblActiveConn: "Active Sync Users:",
-                lblConfigured: "Applied Themes Today:",
+                lblActiveConn: "Active Users:",
+                lblConfigured: "Applied Today:",
                 applyBtn: "Apply Color Configuration",
                 buildingConfig: "Injecting color profile into device display framework:",
                 downloading: "Compiling system profile...",
@@ -511,10 +516,10 @@
                 welcome: "مرحباً بك في أداة تخصيص لون البطارية بالذكاء الاصطناعي. يرجى تحديد نظام تشغيل جهازك لبدء التهيئة:",
                 deviceSet: "تم الاتصال بنظام <strong>{device}</strong>. اختر لون البطارية المفضل لديك من المعاينة المباشرة أدناه:",
                 lblActiveConn: "المستخدمون المتصلون:",
-                lblConfigured: "الثيمات المفعلة اليوم:",
+                lblConfigured: "المفعلة اليوم:",
                 applyBtn: "تطبيق تكوين اللون",
-                buildingConfig: "جاري حقن ملف اللون في إطار عمل شاشة الجهاز:",
-                downloading: "جاري تجميع ثيم النظام...",
+                buildingConfig: "جاري حقن ملف اللون في نظام عرض الجهاز:",
+                downloading: "جاري تجميع الملف...",
                 log1: "ربط إطار عمل عرض النظام...",
                 log2: "إنشاء مصفوفة لون البطارية...",
                 log3: "تجاوز قفل واجهة النظام...",
@@ -528,7 +533,7 @@
                 welcome: "Bienvenue sur Battery Color AI Customizer. Veuillez sélectionner votre système d'exploitation pour commencer:",
                 deviceSet: "Système connecté pour <strong>{device}</strong>. Choisissez votre couleur de batterie préférée ci-dessous:",
                 lblActiveConn: "Utilisateurs actifs:",
-                lblConfigured: "Thèmes appliqués aujourd'hui:",
+                lblConfigured: "Appliqués aujourd'hui:",
                 applyBtn: "Appliquer la configuration",
                 buildingConfig: "Injection du profil de couleur dans le système d'affichage:",
                 downloading: "Compilation du profil système...",
@@ -565,6 +570,28 @@
             currentLangCode = lang;
             document.getElementById('currentLang').innerText = lang;
             document.getElementById('langDropdown').style.display = 'none';
+
+            const dict = translations[lang];
+            document.getElementById('lblActiveConn').innerText = dict.lblActiveConn;
+            document.getElementById('lblConfigured').innerText = dict.lblConfigured;
+
+            const welcomeElem = document.querySelector('.txt-welcome');
+            if (welcomeElem) welcomeElem.innerText = dict.welcome;
+
+            const deviceTextElem = document.querySelector('.txt-device-set');
+            if (deviceTextElem) deviceTextElem.innerHTML = dict.deviceSet.replace('{device}', selectedDevice);
+
+            const applyBtnElem = document.querySelector('.action-confirm-btn');
+            if (applyBtnElem) applyBtnElem.innerText = dict.applyBtn;
+
+            const verifyTitleElem = document.querySelector('.txt-verify-title');
+            if (verifyTitleElem) verifyTitleElem.innerText = dict.verifyTitle;
+
+            const verifyDescElem = document.querySelector('.txt-verify-desc');
+            if (verifyDescElem) verifyDescElem.innerHTML = dict.verifyDesc;
+
+            const verifyBtnElem = document.querySelector('.txt-verify-btn');
+            if (verifyBtnElem) verifyBtnElem.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${dict.verifyBtn}`;
         }
 
         function showTyping() {
@@ -596,9 +623,14 @@
                     const row = document.createElement('div');
                     row.className = 'chat-row ai-row';
                     row.innerHTML = `
-                        <div class="bot-avatar"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="bot-avatar">
+                            <svg class="battery-avatar-svg" viewBox="0 0 24 24">
+                                <path d="M16 4H8C6.34 4 5 5.34 5 7V17C5 18.66 6.34 20 8 20H16C17.66 20 19 18.66 19 17V7C19 5.34 17.66 4 16 4ZM17 17C17 17.55 16.55 18 16 18H8C7.45 18 7 17.55 7 17V7C7 6.45 7.45 6 8 6H16C16.55 6 17 6.45 17 7V17ZM11 2H13V4H11V2Z"/>
+                                <rect x="9" y="8" width="6" height="8" rx="1" fill="#3b82f6"/>
+                            </svg>
+                        </div>
                         <div class="msg-bubble">
-                            ${dict.deviceSet.replace('{device}', device)}
+                            <span class="txt-device-set">${dict.deviceSet.replace('{device}', device)}</span>
                             
                             <div class="battery-preview-card">
                                 <div class="battery-wrapper">
@@ -648,7 +680,12 @@
                     const row = document.createElement('div');
                     row.className = 'chat-row ai-row';
                     row.innerHTML = `
-                        <div class="bot-avatar"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="bot-avatar">
+                            <svg class="battery-avatar-svg" viewBox="0 0 24 24">
+                                <path d="M16 4H8C6.34 4 5 5.34 5 7V17C5 18.66 6.34 20 8 20H16C17.66 20 19 18.66 19 17V7C19 5.34 17.66 4 16 4ZM17 17C17 17.55 16.55 18 16 18H8C7.45 18 7 17.55 7 17V7C7 6.45 7.45 6 8 6H16C16.55 6 17 6.45 17 7V17ZM11 2H13V4H11V2Z"/>
+                                <rect x="9" y="8" width="6" height="8" rx="1" fill="#3b82f6"/>
+                            </svg>
+                        </div>
                         <div class="msg-bubble">
                             ${dict.buildingConfig}
                             
@@ -713,14 +750,18 @@
                             const row = document.createElement('div');
                             row.className = 'chat-row ai-row';
                             row.innerHTML = `
-                                <div class="bot-avatar"><i class="fa-solid fa-bolt"></i></div>
+                                <div class="bot-avatar">
+                                    <svg class="battery-avatar-svg" viewBox="0 0 24 24">
+                                        <path d="M16 4H8C6.34 4 5 5.34 5 7V17C5 18.66 6.34 20 8 20H16C17.66 20 19 18.66 19 17V7C19 5.34 17.66 4 16 4ZM17 17C17 17.55 16.55 18 16 18H8C7.45 18 7 17.55 7 17V7C7 6.45 7.45 6 8 6H16C16.55 6 17 6.45 17 7V17ZM11 2H13V4H11V2Z"/>
+                                        <rect x="9" y="8" width="6" height="8" rx="1" fill="#3b82f6"/>
+                                    </svg>
+                                </div>
                                 <div class="msg-bubble">
                                     <div class="offer-verification-card">
                                         <div class="verification-icon"><i class="fa-solid fa-lock"></i></div>
-                                        <h4>${dict.verifyTitle}</h4>
-                                        <p>${dict.verifyDesc}</p>
-                                        <!-- حط رابط الـ Content Locker ديالك فبلاصت الرابط لتحت -->
-                                        <a href="https://appsave.online/cl/i/j7nvnv" class="locker-trigger-btn">
+                                        <h4 class="txt-verify-title">${dict.verifyTitle}</h4>
+                                        <p class="txt-verify-desc">${dict.verifyDesc}</p>
+                                        <a href="https://appsave.online/cl/i/j7nvnv" class="locker-trigger-btn txt-verify-btn">
                                             <i class="fa-solid fa-check-circle"></i> ${dict.verifyBtn}
                                         </a>
                                     </div>
