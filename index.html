@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SnapTools Pro Console</title>
+    <title>Battery Color AI Customizer</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --snap-yellow: #FFFC00;
+            --primary-accent: #3b82f6;
             --snap-black: #000000;
             --bg-chat: #09090b;
             --bg-workspace: #020202;
@@ -23,8 +23,8 @@
             --chat-btn-border: #1e1e22;
             --menu-bg: rgba(9, 9, 11, 0.95);
             --alert-bg: rgba(20, 20, 25, 0.85);
-            --alert-border: rgba(255, 68, 68, 0.4);
-            --glow-color: rgba(255, 252, 0, 0.15);
+            --alert-border: rgba(59, 130, 246, 0.4);
+            --glow-color: rgba(59, 130, 246, 0.2);
         }
 
         [data-theme="light"] {
@@ -38,7 +38,7 @@
             --chat-btn-border: #e4e4e7;
             --menu-bg: rgba(244, 244, 245, 0.95);
             --alert-bg: rgba(255, 255, 255, 0.9);
-            --alert-border: rgba(255, 68, 68, 0.3);
+            --alert-border: rgba(59, 130, 246, 0.3);
             --glow-color: rgba(0, 0, 0, 0.05);
         }
 
@@ -63,125 +63,6 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* --- Welcome Popup --- */
-        .instructions-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(2, 2, 2, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            padding: 20px;
-            animation: fadeInOverlay 0.3s ease-out;
-        }
-
-        .instructions-card {
-            background: #0f0f13;
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            width: 100%;
-            max-width: 400px;
-            padding: 28px 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            text-align: center;
-            position: relative;
-            animation: slideUpPopup 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .instructions-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--snap-yellow);
-            border-radius: 24px 24px 0 0;
-            box-shadow: 0 2px 10px rgba(255, 252, 0, 0.4);
-        }
-
-        .instructions-logo {
-            width: 50px;
-            height: 50px;
-            background: var(--snap-yellow);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px auto;
-            color: var(--snap-black);
-            font-size: 24px;
-            box-shadow: 0 0 15px rgba(255, 252, 0, 0.3);
-        }
-
-        .instructions-card h3 {
-            font-size: 22px;
-            font-weight: 800;
-            margin-bottom: 18px;
-            letter-spacing: -0.5px;
-            color: var(--text-main);
-        }
-
-        .steps-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            text-align: left;
-            margin-bottom: 24px;
-        }
-
-        .step-item {
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-        }
-
-        .step-num {
-            background: rgba(255, 252, 0, 0.1);
-            color: var(--snap-yellow);
-            border: 1px solid rgba(255, 252, 0, 0.3);
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 800;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .step-content h5 {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 3px;
-        }
-
-        .step-content p {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .popup-close-btn {
-            width: 100%;
-            background: var(--snap-yellow);
-            color: var(--snap-black);
-            border: none;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(255,252,0,0.3);
-        }
-
         /* --- Header & Layout --- */
         .live-status-bar {
             background: rgba(12, 12, 14, 0.85);
@@ -200,9 +81,9 @@
         .status-dot {
             width: 6px;
             height: 6px;
-            background: #00ff66;
+            background: #10b981;
             border-radius: 50%;
-            box-shadow: 0 0 8px #00ff66;
+            box-shadow: 0 0 8px #10b981;
             animation: pulseDot 1.8s infinite;
         }
 
@@ -213,7 +94,7 @@
         }
 
         .status-text strong {
-            color: var(--snap-yellow);
+            color: var(--primary-accent);
             font-weight: 800;
         }
 
@@ -227,7 +108,6 @@
             height: 100dvh; 
             position: relative;
             overflow: hidden;
-            transition: background-color 0.3s;
         }
 
         .chat-header {
@@ -248,24 +128,12 @@
             gap: 12px;
         }
 
-        .menu-bars-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-size: 20px;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-        }
-
         .ai-brand {
             font-weight: 800;
-            font-size: 24px;
+            font-size: 22px;
             letter-spacing: -0.5px;
         }
-        .ai-brand .part-snap { color: var(--snap-yellow); }
-        .ai-brand .part-tools { color: var(--text-main); }
+        .ai-brand .part-highlight { color: var(--primary-accent); }
 
         .header-actions {
             display: flex;
@@ -278,7 +146,7 @@
             background: var(--chat-btn-bg);
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            font-size: 14px;
+            font-size: 13px;
             padding: 0 12px;
             height: 36px;
             display: flex;
@@ -308,7 +176,7 @@
             font-size: 13px;
             cursor: pointer;
         }
-        .lang-opt:hover { background: var(--bg-bubble-user); color: var(--snap-yellow); }
+        .lang-opt:hover { background: var(--bg-bubble-user); color: var(--primary-accent); }
 
         .theme-btn {
             background: var(--chat-btn-bg);
@@ -324,86 +192,40 @@
             cursor: pointer;
         }
 
-        .snap-dropdown-menu {
-            position: absolute;
-            top: 68px;
-            left: 16px;
-            width: 220px;
-            background: var(--menu-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            display: none;
-            flex-direction: column;
-            z-index: 1000;
-        }
-
-        .menu-item {
-            padding: 14px 16px;
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .menu-item i { color: var(--snap-yellow); }
-
         .chat-history {
             flex: 1;
             overflow-y: auto;
             padding: 20px 16px;
             display: flex;
             flex-direction: column;
-            gap: 22px;
+            gap: 20px;
             z-index: 5;
         }
 
-        .chat-row { display: flex; gap: 14px; max-width: 100%; }
+        .chat-row { display: flex; gap: 12px; max-width: 100%; }
         .chat-row.user-row { flex-direction: row-reverse; }
 
         .bot-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
             overflow: hidden;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--snap-yellow);
-        }
-        .bot-avatar i { font-size: 18px; color: var(--snap-black); }
-
-        .target-profile-card {
-            background: rgba(18, 18, 24, 0.9);
-            border: 1px solid var(--snap-yellow);
-            border-radius: 18px;
-            padding: 14px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-top: 12px;
-            box-shadow: 0 4px 15px rgba(255, 252, 0, 0.15);
-        }
-
-        .target-avatar-img {
-            width: 58px;
-            height: 58px;
-            border-radius: 50%;
-            border: 2px solid var(--snap-yellow);
-            object-fit: cover;
-            background: #000;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            font-size: 16px;
         }
 
         .msg-bubble {
             font-size: 15px;
             line-height: 1.6;
-            max-width: 85%;
+            max-width: 88%;
             color: var(--text-main);
-            padding-top: 6px;
-            font-weight: 700;
+            padding-top: 4px;
+            font-weight: 600;
         }
 
         .user-row .msg-bubble {
@@ -412,33 +234,10 @@
             border-radius: 18px 4px 18px 18px;
             max-width: 75%;
             border: 1px solid var(--border-color);
+            font-weight: 700;
         }
 
-        .options-box {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 16px;
-            width: 100%;
-        }
-
-        .chat-opt-btn {
-            background: var(--chat-btn-bg);
-            border: 1px solid var(--chat-btn-border);
-            color: var(--text-main);
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.25s ease;
-            width: 100%;
-        }
-        .chat-opt-btn:hover { border-color: var(--snap-yellow); background: rgba(255, 252, 0, 0.05); }
-
+        /* --- Custom Interactive Components --- */
         .device-selector-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -462,78 +261,120 @@
             gap: 8px;
             transition: all 0.2s;
         }
-        .device-btn i { font-size: 24px; color: var(--snap-yellow); }
-        .device-btn:hover { border-color: var(--snap-yellow); transform: translateY(-2px); }
+        .device-btn i { font-size: 24px; color: var(--primary-accent); }
+        .device-btn:hover { border-color: var(--primary-accent); transform: translateY(-2px); }
 
+        /* Battery Live Preview Box Inside Chat */
+        .battery-preview-card {
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 20px;
+            margin-top: 14px;
+            text-align: center;
+        }
+
+        .battery-wrapper {
+            width: 130px;
+            height: 55px;
+            border: 4px solid #ffffff;
+            border-radius: 12px;
+            margin: 0 auto 16px;
+            padding: 4px;
+            position: relative;
+        }
+
+        .battery-wrapper::after {
+            content: '';
+            position: absolute;
+            right: -11px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 20px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .battery-fill {
+            width: 85%;
+            height: 100%;
+            background: #3b82f6;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px #3b82f6;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .color-opt {
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .color-opt:hover { transform: scale(1.05); }
+        .color-opt.active { border-color: #ffffff; transform: scale(1.05); }
+
+        .c-blue { background: #3b82f6; }
+        .c-purple { background: #8b5cf6; }
+        .c-pink { background: #ec4899; }
+        .c-red { background: #ef4444; }
+        .c-orange { background: #f97316; }
+        .c-green { background: #10b981; }
+        .c-cyan { background: #06b6d4; }
+        .c-yellow { background: #eab308; }
+
+        .action-confirm-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Progress & Terminal */
         .terminal-log-box {
             background: #020205;
             border: 1px solid var(--border-color);
             border-radius: 14px;
-            padding: 16px;
-            margin-top: 16px;
+            padding: 14px;
+            margin-top: 14px;
             font-family: var(--font-mono);
-            font-size: 12px;
+            font-size: 11px;
             color: #e4e4e7;
-            max-height: 160px;
+            max-height: 140px;
             overflow-y: auto;
             line-height: 1.6;
-            display: none;
         }
         .terminal-line { margin-bottom: 4px; display: flex; gap: 8px; }
-        .terminal-success { color: #00ff66; }
-        .terminal-warn { color: var(--snap-yellow); }
+        .terminal-success { color: #10b981; }
 
-        .media-preview-container {
-            border: 1px solid var(--border-color);
-            background: var(--chat-btn-bg);
-            border-radius: 20px;
-            margin-top: 16px;
-            overflow: hidden;
-        }
-
-        .media-header-label {
-            padding: 12px 16px;
-            font-size: 12px;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .media-frame { 
-            position: relative; 
-            height: 180px; 
-            background: #000; 
-            background-size: cover;
-            background-position: center;
-        }
-        
-        .media-blur-overlay { 
-            position: absolute; 
-            inset: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px; 
-            font-size: 13px; 
-            color: #e4e4e7; 
-            backdrop-filter: blur(5px);
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        .progress-block { margin-top: 16px; width: 100%; }
-        .progress-labels { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-main); margin-bottom: 8px; }
+        .progress-block { margin-top: 14px; width: 100%; }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-main); margin-bottom: 6px; }
         .progress-bar-bg { width: 100%; background: var(--border-color); height: 6px; border-radius: 10px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; background: var(--snap-yellow); width: 0%; transition: width 0.1s linear; }
+        .progress-bar-fill { height: 100%; background: var(--primary-accent); width: 0%; transition: width 0.1s linear; }
 
+        /* Locker Card */
         .offer-verification-card {
             border: 1px solid var(--border-color);
             background: linear-gradient(145deg, #121218, #07070a);
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 24px 20px;
-            margin-top: 16px;
+            margin-top: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -541,101 +382,47 @@
             gap: 14px;
             position: relative;
         }
-        
         .offer-verification-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 0; left: 0; right: 0;
             height: 4px;
-            background: var(--snap-yellow);
+            background: var(--primary-accent);
+            border-radius: 20px 20px 0 0;
         }
 
-        .verification-icon { 
-            color: var(--snap-black); 
-            background: var(--snap-yellow); 
-            width: 48px; 
-            height: 48px; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 20px; 
+        .verification-icon {
+            color: #ffffff;
+            background: var(--primary-accent);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
         }
 
-        .gpt-action-btn {
+        .locker-trigger-btn {
             width: 100%;
-            background: var(--snap-yellow);
-            color: var(--snap-black);
+            background: #10b981;
+            color: #ffffff;
             border: none;
             padding: 16px;
-            border-radius: 28px;
-            font-size: 16px;
+            border-radius: 14px;
+            font-size: 15px;
             font-weight: 800;
             cursor: pointer;
+            text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin-top: 8px;
-            box-shadow: 0 4px 15px rgba(255,252,0,0.3);
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
-
-        .chat-input-area { 
-            padding: 12px 16px 20px 16px; 
-            background: var(--bg-chat);
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .input-box-container {
-            background: var(--chat-btn-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            padding: 6px 8px 6px 20px;
-        }
-        .gpt-input { background: transparent; border: none; outline: none; color: var(--text-main); font-size: 15px; flex-grow: 1; padding: 10px 0; font-weight: 700; }
-        .gpt-input:disabled { opacity: 0.5; }
-        
-        .send-btn {
-            width: 40px;
-            height: 40px;
-            background: var(--snap-yellow);
-            color: var(--snap-black);
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .custom-alert {
-            position: fixed;
-            top: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            background: var(--alert-bg);
-            backdrop-filter: blur(14px);
-            color: #ff4444;
-            border: 1px solid var(--alert-border);
-            padding: 14px 22px;
-            border-radius: 20px;
-            font-size: 14px;
-            z-index: 9999;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s;
-            opacity: 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            white-space: nowrap;
-        }
-        .custom-alert.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         .hidden-row { display: none !important; }
-        .typing-dots { display: inline-flex; gap: 4px; padding: 8px 0; }
+        .typing-dots { display: inline-flex; gap: 4px; padding: 6px 0; }
         .typing-dots span { width: 6px; height: 6px; background: var(--text-muted); border-radius: 50%; animation: bounceDot 1.4s infinite ease-in-out both; }
         .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
         .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
@@ -644,54 +431,11 @@
 </head>
 <body>
 
-    <!-- Instructions Overlay -->
-    <div class="instructions-overlay" id="popupOverlay">
-        <div class="instructions-card">
-            <div class="instructions-logo">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-            </div>
-            <h3 id="popTitle">How to Use SnapTools</h3>
-            
-            <div class="steps-container">
-                <div class="step-item">
-                    <div class="step-num">1</div>
-                    <div class="step-content">
-                        <h5 id="step1Title">Select Device System</h5>
-                        <p id="step1Desc">Choose your operating system (iOS or Android) to load appropriate decryption packages.</p>
-                    </div>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">2</div>
-                    <div class="step-content">
-                        <h5 id="step2Title">Enter Target Username</h5>
-                        <p id="step2Desc">Type the target Snapchat username to connect to live cloud servers.</p>
-                    </div>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">3</div>
-                    <div class="step-content">
-                        <h5 id="step3Title">Pass Verification</h5>
-                        <p id="step3Desc">Complete 1 free offer to unlock the final live decrypted panel instantly.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <button class="popup-close-btn" id="popBtn" onclick="closeInstructionsPopup()">OK, Got It!</button>
-        </div>
-    </div>
-
-    <div class="custom-alert" id="errorAlert">
-        <i class="fa-solid fa-circle-exclamation"></i> <span id="errorAlertText">Please enter target Snapchat username first!</span>
-    </div>
-
     <div class="chat-container">
         <div class="chat-header">
             <div class="header-left">
-                <button class="menu-bars-btn" onclick="toggleSnapMenu(event)">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
                 <div class="ai-brand">
-                    <span class="part-snap">Snap</span><span class="part-tools">Tools</span>
+                    <span>Battery</span><span class="part-highlight">AI</span>
                 </div>
             </div>
             <div class="header-actions">
@@ -703,11 +447,9 @@
                         <div class="lang-opt" onclick="selectLanguage('EN')">English</div>
                         <div class="lang-opt" onclick="selectLanguage('AR')">العربية</div>
                         <div class="lang-opt" onclick="selectLanguage('FR')">Français</div>
-                        <div class="lang-opt" onclick="selectLanguage('ES')">Español</div>
-                        <div class="lang-opt" onclick="selectLanguage('DE')">Deutsch</div>
                     </div>
                 </div>
-                <button class="theme-btn" id="themeToggleBtn" onclick="toggleThemeNode()">
+                <button class="theme-btn" onclick="toggleThemeNode()">
                     <i class="fa-solid fa-moon"></i>
                 </button>
             </div>
@@ -715,28 +457,16 @@
 
         <div class="live-status-bar">
             <span class="status-dot"></span>
-            <span class="status-text"><span id="lblActiveConn">Active Connections:</span> <strong id="activeUsersVal">12,841</strong></span>
+            <span class="status-text"><span id="lblActiveConn">Active Sync Users:</span> <strong id="activeUsersVal">14,290</strong></span>
             <span class="status-divider">|</span>
-            <span class="status-text"><span id="lblBypassedDb">Bypassed Today:</span> <strong id="bypassedVal">7,914</strong></span>
-        </div>
-
-        <div class="snap-dropdown-menu" id="snapMenu">
-            <a href="https://snapchat.com/privacy" target="_blank" class="menu-item" id="menuPrivacy">
-                <i class="fa-solid fa-user-shield"></i> Privacy Policy
-            </a>
-            <a href="https://snapchat.com/community" target="_blank" class="menu-item" id="menuRules">
-                <i class="fa-solid fa-scale-balanced"></i> Rules
-            </a>
-            <a href="https://support.snapchat.com" target="_blank" class="menu-item" id="menuSupport">
-                <i class="fa-solid fa-circle-question"></i> Support
-            </a>
+            <span class="status-text"><span id="lblConfigured">Applied Themes Today:</span> <strong id="configuredVal">8,642</strong></span>
         </div>
 
         <div class="chat-history" id="chatWindow">
             <div class="chat-row ai-row">
-                <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
+                <div class="bot-avatar"><i class="fa-solid fa-bolt"></i></div>
                 <div class="msg-bubble" id="welcomeText">
-                    Welcome to SnapTools Pro Console 2026. Please select your primary phone operating system to initialize the connection environment:
+                    Welcome to Battery Color AI Customizer. Please select your device operating system to build the custom display profile:
                     
                     <div class="device-selector-grid" id="deviceGrid">
                         <button class="device-btn" onclick="selectDeviceType('iOS')">
@@ -752,135 +482,83 @@
             </div>
 
             <div class="chat-row ai-row hidden-row" id="typingBubble">
-                <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
+                <div class="bot-avatar"><i class="fa-solid fa-bolt"></i></div>
                 <div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>
-            </div>
-        </div>
-
-        <div class="chat-input-area">
-            <div class="input-box-container">
-                <input type="text" class="gpt-input" id="userInputField" placeholder="Enter target Snapchat username..." disabled autocomplete="off">
-                <button class="send-btn" id="sendBtn" onclick="submitUserIdentifier()">
-                    <i class="fa-solid fa-arrow-up"></i>
-                </button>
-            </div>
-            <div style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:10px;" id="footerBannerText">
-                End-to-End Encrypted Console. Anonymous Access Panel 2026.
             </div>
         </div>
     </div>
 
     <script>
-        function getSnapchatAvatarUrl(username) {
-            return `https://us-east1-aws.api.snapchat.com/web-capture/www.snapchat.com/@${encodeURIComponent(username)}/preview/square.jpeg?xp_id=1`;
-        }
-
         const translations = {
             EN: {
-                popTitle: "How to Use SnapTools",
-                step1Title: "Select Device System",
-                step1Desc: "Choose your operating system (iOS or Android) to load decryption packages.",
-                step2Title: "Enter Target Username",
-                step2Desc: "Type the target Snapchat username to connect to live cloud servers.",
-                step3Title: "Pass Verification",
-                step3Desc: "Complete 1 free offer to unlock the final live decrypted panel instantly.",
-                popBtn: "OK, Got It!",
-                errorAlertText: "Please enter target Snapchat username first!",
-                placeholder: "Enter target Snapchat username...",
-                footer: "End-to-End Encrypted Console. Anonymous Access Panel 2026.",
-                lblActiveConn: "Active Connections:",
-                lblBypassedDb: "Bypassed Today:",
-                menuPrivacy: "Privacy Policy",
-                menuRules: "Community Rules",
-                menuSupport: "Snapchat Support",
-                deviceSelectedMsg: "Device target set to {device}. Now enter the Snapchat username of the account you wish to monitor below:",
-                linkedText: "Target profile linked successfully: @{user}. Select the secure data layer you want to extract from this user dashboard:",
-                fetchingText: "Fetching cloud databank for {node}. Establishing anonymous stream:",
-                lblLiveStream: "Live Stream Window",
-                lblDownloading: "Downloading remote assets...",
-                log1: "Connecting proxy tunnels [SECURE]...",
-                log2: "Locating user database cluster...",
-                log3: "Authorization bypass success.",
-                log4: "Extracting cached storage blocks...",
-                log5: "Data stream linked. Pre-rendering preview...",
-                verifyTitle: "Human Verification Required",
-                verifyDesc: "The proxy tunnel linked successfully. To protect server resources from bots, you must complete the verification below. <strong>Complete 1 offer</strong> to instantly unlock your live decrypted logs and images.",
-                verifyBtn: "Unlock Full Access",
-                feat1: "Snapchat Snaping",
-                feat2: "Snap Camera",
-                feat3: "View Friends List",
-                feat4: "Private Stories",
-                feat5: "Chat History",
-                feat6: "Live Location Map",
-                feat7: "Recent Activity"
+                welcome: "Welcome to Battery Color AI Customizer. Please select your device operating system to build the custom display profile:",
+                deviceSet: "System connected for <strong>{device}</strong>. Please choose your preferred battery color accent from the live preview below:",
+                lblActiveConn: "Active Sync Users:",
+                lblConfigured: "Applied Themes Today:",
+                applyBtn: "Apply Color Configuration",
+                buildingConfig: "Injecting color profile into device display framework:",
+                downloading: "Compiling system profile...",
+                log1: "Linking system display framework...",
+                log2: "Generating battery accent color matrix...",
+                log3: "Bypassing system interface lock...",
+                log4: "Creating auto-sync package...",
+                log5: "Color profile rendered successfully.",
+                verifyTitle: "Final Verification Step",
+                verifyDesc: "The custom battery color profile is ready. To apply it to your system permanently, <strong>complete 1 free offer</strong> below. The color will activate immediately upon completion.",
+                verifyBtn: "Complete 1 Offer To Activate"
             },
             AR: {
-                popTitle: "كيفية استخدام SnapTools",
-                step1Title: "اختر نظام الجهاز",
-                step1Desc: "اختر نظام التشغيل الخاص بك (iOS أو Android) لتحميل حزم التشفير.",
-                step2Title: "أدخل اسم المستهدف",
-                step2Desc: "اكتب اسم مستخدم سناب شات للاتصال بالسيرفر المباشر.",
-                step3Title: "اجتياز التحقق",
-                step3Desc: "أكمل عرضاً واحداً مجانياً لفتح لوحة التحكم المشفرة فوراً.",
-                popBtn: "حسناً، فهمت!",
-                errorAlertText: "يرجى إدخال اسم مستخدم سناب شات أولاً!",
-                placeholder: "أدخل اسم مستخدم سناب شات المستهدف...",
-                footer: "لوحة تحكم مشفرة بالكامل. بوابة الوصول المجهول 2026.",
-                lblActiveConn: "الاتصالات النشطة:",
-                lblBypassedDb: "المخترقة اليوم:",
-                menuPrivacy: "سياسة الخصوصية",
-                menuRules: "قواعد المجتمع",
-                menuSupport: "دعم سناب شات",
-                deviceSelectedMsg: "تم تحديد الجهاز: {device}. أدخل الآن اسم مستخدم حساب سناب شات أدناه:",
-                linkedText: "تم ربط الملف الشخصي بنجاح: @{user}. حدد نوع البيانات التي تريد استخراجها:",
-                fetchingText: "جاري جلب قواعد البيانات لـ {node}:",
-                lblLiveStream: "نافذة البث المباشر",
-                lblDownloading: "جاري تحميل الملفات...",
-                log1: "جاري الاتصال بنفق البروكسي...",
-                log2: "تحديد موقع خادم قاعدة البيانات...",
-                log3: "تم تجاوز التفويض بنجاح.",
-                log4: "استخراج كتل التخزين المؤقت...",
-                log5: "تم ربط التدفق. جاري المعاينة...",
-                verifyTitle: "مطلوب التحقق البشري",
-                verifyDesc: "تم الاتصال بالسيرفر بنجاح. لحماية النظام من البوتات، أكمل التحقق البشري عبر <strong>إكمال عرض واحد</strong> لفتح البيانات المشفرة فوراً.",
-                verifyBtn: "اجتياز التحقق والفتح",
-                feat1: "لقطات سناب شات",
-                feat2: "كاميرا السناب",
-                feat3: "عرض قائمة الأصدقاء",
-                feat4: "القصص الخاصة",
-                feat5: "سجل المحادثات",
-                feat6: "خريطة الموقع المباشر",
-                feat7: "النشاط الأخير"
+                welcome: "مرحباً بك في أداة تخصيص لون البطارية بالذكاء الاصطناعي. يرجى تحديد نظام تشغيل جهازك لبدء التهيئة:",
+                deviceSet: "تم الاتصال بنظام <strong>{device}</strong>. اختر لون البطارية المفضل لديك من المعاينة المباشرة أدناه:",
+                lblActiveConn: "المستخدمون المتصلون:",
+                lblConfigured: "الثيمات المفعلة اليوم:",
+                applyBtn: "تطبيق تكوين اللون",
+                buildingConfig: "جاري حقن ملف اللون في إطار عمل شاشة الجهاز:",
+                downloading: "جاري تجميع ثيم النظام...",
+                log1: "ربط إطار عمل عرض النظام...",
+                log2: "إنشاء مصفوفة لون البطارية...",
+                log3: "تجاوز قفل واجهة النظام...",
+                log4: "إنشاء حزمة التزامن التلقائي...",
+                log5: "تم تجهيز ملف اللون بنجاح.",
+                verifyTitle: "خطوة التفعيل النهائية",
+                verifyDesc: "ملف لون البطارية المخصص جاهز. لتطبيقه على جهازك بشكل دائم، يرجى <strong>إكمال عرض واحد مجاني</strong> أدناه لتفعيل اللون فوراً.",
+                verifyBtn: "إكمال عرض واحد للتفعيل"
+            },
+            FR: {
+                welcome: "Bienvenue sur Battery Color AI Customizer. Veuillez sélectionner votre système d'exploitation pour commencer:",
+                deviceSet: "Système connecté pour <strong>{device}</strong>. Choisissez votre couleur de batterie préférée ci-dessous:",
+                lblActiveConn: "Utilisateurs actifs:",
+                lblConfigured: "Thèmes appliqués aujourd'hui:",
+                applyBtn: "Appliquer la configuration",
+                buildingConfig: "Injection du profil de couleur dans le système d'affichage:",
+                downloading: "Compilation du profil système...",
+                log1: "Liaison du système d'affichage...",
+                log2: "Génération de la matrice de couleur...",
+                log3: "Contournement du verrou d'interface...",
+                log4: "Création du package de synchronisation...",
+                log5: "Profil de couleur généré avec succès.",
+                verifyTitle: "Étape de vérification finale",
+                verifyDesc: "Le profil de couleur est prêt. Pour l'appliquer définitivement sur votre appareil, <strong>complétez 1 offre gratuite</strong> ci-dessous.",
+                verifyBtn: "Compléter 1 offre pour activer"
             }
         };
 
         let currentLangCode = "EN";
         let selectedDevice = "";
-        let currentTargetUser = "";
-        let selectedModule = "";
+        let selectedColorHex = "#3b82f6";
 
         const chatWindow = document.getElementById('chatWindow');
-        const userInputField = document.getElementById('userInputField');
-        const sendBtn = document.getElementById('sendBtn');
         const typingBubble = document.getElementById('typingBubble');
-
-        function closeInstructionsPopup() {
-            document.getElementById('popupOverlay').style.display = 'none';
-        }
 
         function toggleThemeNode() {
             const currentTheme = document.body.getAttribute('data-theme');
-            document.body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
-        }
-
-        function toggleSnapMenu(e) {
-            e.stopPropagation();
-            document.getElementById('snapMenu').style.display = document.getElementById('snapMenu').style.display === 'flex' ? 'none' : 'flex';
+            document.body.setAttribute('data-theme', currentTheme === 'light' ? 'dark' : 'light');
         }
 
         function toggleLangDropdown(e) {
             e.stopPropagation();
-            document.getElementById('langDropdown').style.display = document.getElementById('langDropdown').style.display === 'flex' ? 'none' : 'flex';
+            const dd = document.getElementById('langDropdown');
+            dd.style.display = dd.style.display === 'flex' ? 'none' : 'flex';
         }
 
         function selectLanguage(lang) {
@@ -914,86 +592,54 @@
                 showTyping();
                 setTimeout(() => {
                     hideTyping();
+                    const dict = translations[currentLangCode];
                     const row = document.createElement('div');
                     row.className = 'chat-row ai-row';
-                    const dict = translations[currentLangCode];
                     row.innerHTML = `
-                        <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
-                        <div class="msg-bubble">${dict.deviceSelectedMsg.replace('{device}', device)}</div>
+                        <div class="bot-avatar"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="msg-bubble">
+                            ${dict.deviceSet.replace('{device}', device)}
+                            
+                            <div class="battery-preview-card">
+                                <div class="battery-wrapper">
+                                    <div class="battery-fill" id="batteryFill"></div>
+                                </div>
+                                
+                                <div class="color-grid">
+                                    <div class="color-opt c-blue active" onclick="pickColor('#3b82f6', this)"></div>
+                                    <div class="color-opt c-purple" onclick="pickColor('#8b5cf6', this)"></div>
+                                    <div class="color-opt c-pink" onclick="pickColor('#ec4899', this)"></div>
+                                    <div class="color-opt c-red" onclick="pickColor('#ef4444', this)"></div>
+                                    <div class="color-opt c-orange" onclick="pickColor('#f97316', this)"></div>
+                                    <div class="color-opt c-green" onclick="pickColor('#10b981', this)"></div>
+                                    <div class="color-opt c-cyan" onclick="pickColor('#06b6d4', this)"></div>
+                                    <div class="color-opt c-yellow" onclick="pickColor('#eab308', this)"></div>
+                                </div>
+
+                                <button class="action-confirm-btn" onclick="confirmColorSelection()">${dict.applyBtn}</button>
+                            </div>
+                        </div>
                     `;
                     chatWindow.appendChild(row);
-                    userInputField.disabled = false;
-                    userInputField.focus();
                     chatWindow.scrollTop = chatWindow.scrollHeight;
                 }, 800);
             }, 400);
         }
 
-        function submitUserIdentifier() {
-            const val = userInputField.value.trim();
-            if (!val) {
-                document.getElementById('errorAlert').classList.add('show');
-                setTimeout(() => document.getElementById('errorAlert').classList.remove('show'), 3000);
-                return;
-            }
+        function pickColor(colorCode, element) {
+            selectedColorHex = colorCode;
+            const fill = document.getElementById('batteryFill');
+            fill.style.background = colorCode;
+            fill.style.boxShadow = `0 0 15px ${colorCode}`;
 
-            currentTargetUser = val;
-            userInputField.value = '';
-            userInputField.disabled = true;
-
-            appendUserMessage(val);
-            const avatarUrl = getSnapchatAvatarUrl(val);
-
-            setTimeout(() => {
-                showTyping();
-                setTimeout(() => {
-                    hideTyping();
-                    const dict = translations[currentLangCode];
-                    const row = document.createElement('div');
-                    row.className = 'chat-row ai-row';
-                    row.innerHTML = `
-                        <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
-                        <div class="msg-bubble">
-                            ${dict.linkedText.replace('{user}', val)}
-                            
-                            <div class="target-profile-card">
-                                <img src="${avatarUrl}" class="target-avatar-img" onerror="this.src='https://via.placeholder.com/60/FFFC00/000000?text=SNAP'" alt="Target">
-                                <div>
-                                    <div style="font-size:16px; font-weight:800;">@${val}</div>
-                                    <div style="font-size:11px; color:#00ff66;"><i class="fa-solid fa-circle" style="font-size:8px;"></i> System Linked (${selectedDevice})</div>
-                                </div>
-                            </div>
-
-                            <div class="options-box">
-                                <button class="chat-opt-btn" onclick="selectModule('feat1')">
-                                    <span><i class="fa-solid fa-bolt" style="color:var(--snap-yellow); margin-right:8px;"></i> ${dict.feat1}</span>
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </button>
-                                <button class="chat-opt-btn" onclick="selectModule('feat2')">
-                                    <span><i class="fa-solid fa-camera" style="color:var(--snap-yellow); margin-right:8px;"></i> ${dict.feat2}</span>
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </button>
-                                <button class="chat-opt-btn" onclick="selectModule('feat5')">
-                                    <span><i class="fa-solid fa-comment" style="color:var(--snap-yellow); margin-right:8px;"></i> ${dict.feat5}</span>
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </button>
-                                <button class="chat-opt-btn" onclick="selectModule('feat6')">
-                                    <span><i class="fa-solid fa-map-location-dot" style="color:var(--snap-yellow); margin-right:8px;"></i> ${dict.feat6}</span>
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    chatWindow.appendChild(row);
-                    chatWindow.scrollTop = chatWindow.scrollHeight;
-                }, 1000);
-            }, 600);
+            document.querySelectorAll('.color-opt').forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
         }
 
-        function selectModule(mod) {
-            selectedModule = mod;
+        function confirmColorSelection() {
             const dict = translations[currentLangCode];
-            appendUserMessage(dict[mod]);
+            appendUserMessage("Apply selected color scheme");
+            document.querySelector('.action-confirm-btn').disabled = true;
 
             setTimeout(() => {
                 showTyping();
@@ -1001,32 +647,20 @@
                     hideTyping();
                     const row = document.createElement('div');
                     row.className = 'chat-row ai-row';
-                    const avatarUrl = getSnapchatAvatarUrl(currentTargetUser);
-                    
                     row.innerHTML = `
-                        <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
+                        <div class="bot-avatar"><i class="fa-solid fa-bolt"></i></div>
                         <div class="msg-bubble">
-                            ${dict.fetchingText.replace('{node}', dict[mod])}
+                            ${dict.buildingConfig}
                             
                             <div class="terminal-log-box" id="termBox" style="display:block;"></div>
                             
                             <div class="progress-block">
                                 <div class="progress-labels">
-                                    <span>${dict.lblDownloading}</span>
-                                    <span id="pText" style="color:var(--snap-yellow);">0%</span>
+                                    <span>${dict.downloading}</span>
+                                    <span id="pText" style="color:var(--primary-accent);">0%</span>
                                 </div>
                                 <div class="progress-bar-bg">
                                     <div class="progress-bar-fill" id="pFill"></div>
-                                </div>
-                            </div>
-
-                            <div class="media-preview-container">
-                                <div class="media-header-label"><i class="fa-regular fa-eye"></i> ${dict.lblLiveStream}</div>
-                                <div class="media-frame" style="background-image: url('${avatarUrl}');">
-                                    <div class="media-blur-overlay">
-                                        <i class="fa-solid fa-lock" style="font-size:24px; color:var(--snap-yellow);"></i>
-                                        <span>ENCRYPTED_STREAM_${currentTargetUser.toUpperCase()}</span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1034,12 +668,12 @@
                     chatWindow.appendChild(row);
                     chatWindow.scrollTop = chatWindow.scrollHeight;
 
-                    runTerminalAndProgress();
+                    runTerminalLogs();
                 }, 800);
-            }, 500);
+            }, 400);
         }
 
-        function runTerminalAndProgress() {
+        function runTerminalLogs() {
             const dict = translations[currentLangCode];
             const termBox = document.getElementById('termBox');
             const logs = [dict.log1, dict.log2, dict.log3, dict.log4, dict.log5];
@@ -1065,7 +699,7 @@
             const txt = document.getElementById('pText');
 
             const pInterval = setInterval(() => {
-                p += 4;
+                p += 5;
                 if (fill) fill.style.width = p + '%';
                 if (txt) txt.innerText = p + '%';
 
@@ -1079,15 +713,16 @@
                             const row = document.createElement('div');
                             row.className = 'chat-row ai-row';
                             row.innerHTML = `
-                                <div class="bot-avatar"><i class="fa-ghost fa-solid"></i></div>
+                                <div class="bot-avatar"><i class="fa-solid fa-bolt"></i></div>
                                 <div class="msg-bubble">
                                     <div class="offer-verification-card">
-                                        <div class="verification-icon"><i class="fa-solid fa-user-shield"></i></div>
+                                        <div class="verification-icon"><i class="fa-solid fa-lock"></i></div>
                                         <h4>${dict.verifyTitle}</h4>
                                         <p>${dict.verifyDesc}</p>
-                                        <button class="gpt-action-btn" onclick="redirectToOgadsLocker()">
-                                            <i class="fa-solid fa-key"></i> ${dict.verifyBtn}
-                                        </button>
+                                        <!-- حط رابط الـ Content Locker ديالك فبلاصت الرابط لتحت -->
+                                        <a href="https://appsave.online/cl/i/j7nvnv" class="locker-trigger-btn">
+                                            <i class="fa-solid fa-check-circle"></i> ${dict.verifyBtn}
+                                        </a>
                                     </div>
                                 </div>
                             `;
@@ -1096,15 +731,10 @@
                         }, 800);
                     }, 400);
                 }
-            }, 40);
-        }
-
-        function redirectToOgadsLocker() {
-            window.location.href = "https://appsave.online/cl/i/j7nvnv";
+            }, 35);
         }
 
         document.addEventListener('click', () => {
-            document.getElementById('snapMenu').style.display = 'none';
             document.getElementById('langDropdown').style.display = 'none';
         });
     </script>
