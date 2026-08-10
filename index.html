@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battery Customizer Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>BatteryAI Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,145 +14,167 @@
         }
 
         body {
-            background-color: #0b0f19;
-            color: #ffffff;
-            min-height: 100vh;
+            background-color: #090d16;
+            color: #ececec;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            justify-content: center;
+            padding: 15px;
         }
 
-        .header {
+        .chat-container {
             width: 100%;
-            max-width: 900px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 40px;
-        }
-
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .status-badge {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .main-card {
+            max-width: 500px;
+            height: 680px;
             background: #111827;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 40px 30px;
-            width: 100%;
-            max-width: 550px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-            text-align: center;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
         }
 
-        .title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
+        /* Top Header */
+        .chat-header {
+            padding: 16px 20px;
+            background: #1f2937;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .subtitle {
-            color: #9ca3af;
+        .ai-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .ai-info h2 {
             font-size: 0.95rem;
-            margin-bottom: 30px;
-            line-height: 1.5;
+            font-weight: 700;
+            color: #fff;
         }
 
-        /* Battery Preview Component */
-        .preview-container {
-            background: #030712;
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 30px;
+        .ai-info p {
+            font-size: 0.75rem;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #10b981;
+            border-radius: 50%;
+        }
+
+        /* Chat Body */
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .msg {
+            max-width: 85%;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-radius: 14px;
+            padding: 12px 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .msg-ai {
+            background: #1f2937;
+            color: #e5e7eb;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .battery-wrapper {
-            width: 140px;
-            height: 60px;
-            border: 4px solid #ffffff;
+        .msg-user {
+            background: #2563eb;
+            color: #ffffff;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        /* Battery Preview Inside Chat */
+        .battery-preview {
+            background: #0b0f19;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
+            padding: 20px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .battery-wrapper {
+            width: 120px;
+            height: 50px;
+            border: 3px solid #ffffff;
+            border-radius: 10px;
             margin: 0 auto;
-            padding: 4px;
+            padding: 3px;
             position: relative;
         }
 
         .battery-wrapper::after {
             content: '';
             position: absolute;
-            right: -12px;
+            right: -10px;
             top: 50%;
             transform: translateY(-50%);
-            width: 6px;
-            height: 22px;
+            width: 5px;
+            height: 18px;
             background: #ffffff;
-            border-radius: 0 4px 4px 0;
+            border-radius: 0 3px 3px 0;
         }
 
         .battery-fill {
-            width: 85%;
+            width: 80%;
             height: 100%;
             background: #3b82f6;
-            border-radius: 6px;
-            transition: background 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 0 15px #3b82f6;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 12px #3b82f6;
         }
 
-        /* Color Grid Selection */
-        .color-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #6b7280;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .color-grid {
+        /* Color Options Grid */
+        .color-selector {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 30px;
+            gap: 10px;
+            margin-top: 12px;
         }
 
-        .color-option {
-            aspect-ratio: 1;
-            border-radius: 12px;
+        .color-btn {
+            height: 36px;
+            border-radius: 8px;
             cursor: pointer;
             border: 2px solid transparent;
-            transition: all 0.2s ease;
+            transition: transform 0.2s;
         }
 
-        .color-option:hover {
-            transform: translateY(-2px);
-        }
+        .color-btn:hover { transform: scale(1.05); }
+        .color-btn.active { border-color: #fff; }
 
-        .color-option.active {
-            border-color: #ffffff;
-            transform: scale(1.05);
-        }
-
-        /* Color Values */
         .c-blue { background: #3b82f6; }
         .c-purple { background: #8b5cf6; }
         .c-pink { background: #ec4899; }
@@ -162,193 +184,174 @@
         .c-cyan { background: #06b6d4; }
         .c-yellow { background: #eab308; }
 
-        /* Action Button */
-        .activate-btn {
+        /* Actions Button */
+        .action-btn {
             width: 100%;
             background: linear-gradient(90deg, #2563eb, #7c3aed);
-            color: #ffffff;
+            color: #fff;
             border: none;
-            padding: 18px;
-            border-radius: 14px;
-            font-size: 1.05rem;
+            padding: 12px;
+            border-radius: 10px;
             font-weight: 700;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            margin-top: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .activate-btn:hover {
-            opacity: 0.95;
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
-        }
-
-        /* Modal / Popup Styling */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal-card {
-            background: #111827;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 35px 25px;
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .modal-card {
-            transform: translateY(0);
-        }
-
-        .modal-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .modal-text {
-            color: #9ca3af;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .instruction-box {
-            background: #1f2937;
-            border-left: 4px solid #3b82f6;
-            padding: 12px 15px;
-            text-align: left;
-            font-size: 0.85rem;
-            color: #d1d5db;
-            margin-bottom: 25px;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .locker-link-btn {
+        .locker-btn {
             display: block;
             width: 100%;
             background: #10b981;
-            color: #ffffff;
+            color: #fff;
             text-decoration: none;
-            padding: 16px;
-            border-radius: 12px;
+            padding: 14px;
+            border-radius: 10px;
             font-weight: 700;
-            font-size: 1rem;
-            transition: background 0.2s;
+            font-size: 0.95rem;
+            text-align: center;
+            margin-top: 10px;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
-        .locker-link-btn:hover {
-            background: #059669;
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: #1f2937;
+            border-radius: 14px;
+            width: fit-content;
+            align-self: flex-start;
         }
 
-        .close-btn {
-            background: transparent;
-            border: none;
-            color: #6b7280;
-            font-size: 0.85rem;
-            margin-top: 15px;
-            cursor: pointer;
-            text-decoration: underline;
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
         }
 
-        .close-btn:hover {
-            color: #9ca3af;
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo">BATTERY CONTROL</div>
-        <div class="status-badge">SYSTEM READY</div>
-    </header>
-
-    <main class="main-card">
-        <h1 class="title">Battery Color Customizer</h1>
-        <p class="subtitle">Select your preferred accent color for your system battery indicator. Works on all operating systems without root or jailbreak.</p>
-
-        <div class="preview-container">
-            <div class="battery-wrapper">
-                <div class="battery-fill" id="batteryFill"></div>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="ai-avatar">AI</div>
+            <div class="ai-info">
+                <h2>Battery Customizer Bot</h2>
+                <p><span class="status-dot"></span> Online & Ready</p>
             </div>
         </div>
 
-        <div class="color-label">Select Color Theme</div>
-        
-        <div class="color-grid">
-            <div class="color-option c-blue active" onclick="selectColor('#3b82f6', this)"></div>
-            <div class="color-option c-purple" onclick="selectColor('#8b5cf6', this)"></div>
-            <div class="color-option c-pink" onclick="selectColor('#ec4899', this)"></div>
-            <div class="color-option c-red" onclick="selectColor('#ef4444', this)"></div>
-            <div class="color-option c-orange" onclick="selectColor('#f97316', this)"></div>
-            <div class="color-option c-green" onclick="selectColor('#10b981', this)"></div>
-            <div class="color-option c-cyan" onclick="selectColor('#06b6d4', this)"></div>
-            <div class="color-option c-yellow" onclick="selectColor('#eab308', this)"></div>
-        </div>
-
-        <button class="activate-btn" onclick="openModal()">Activate Color</button>
-    </main>
-
-    <!-- Modal Popup -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-card">
-            <h2 class="modal-title">Final Activation Step</h2>
-            <p class="modal-text">To apply this color configuration to your system interface permanently, a quick verification is required.</p>
-            
-            <div class="instruction-box">
-                Complete <strong>1 free offer</strong> from the official verification page below. Once completed, your system configuration will automatically update.
+        <div class="chat-body" id="chatBody">
+            <!-- Initial AI Message -->
+            <div class="msg msg-ai">
+                Hello! I am your automated assistant. I can help you change your device's system battery color instantly without root or jailbreak.
             </div>
 
-            <!-- حط رابط الـ Content Locker ديالك فبلاصت الرابط لتحت -->
-            <a href="https://your-locker-link.com" class="locker-link-btn">Complete 1 Offer To Activate</a>
+            <!-- AI Interactive Card -->
+            <div class="msg msg-ai" id="interactiveStep">
+                Please select your desired battery color below to see the preview:
+                
+                <div class="battery-preview">
+                    <div class="battery-wrapper">
+                        <div class="battery-fill" id="batteryFill"></div>
+                    </div>
+                </div>
 
-            <button class="close-btn" onclick="closeModal()">Cancel Procedure</button>
+                <div class="color-selector">
+                    <div class="color-btn c-blue active" onclick="selectColor('#3b82f6', this)"></div>
+                    <div class="color-btn c-purple" onclick="selectColor('#8b5cf6', this)"></div>
+                    <div class="color-btn c-pink" onclick="selectColor('#ec4899', this)"></div>
+                    <div class="color-btn c-red" onclick="selectColor('#ef4444', this)"></div>
+                    <div class="color-btn c-orange" onclick="selectColor('#f97316', this)"></div>
+                    <div class="color-btn c-green" onclick="selectColor('#10b981', this)"></div>
+                    <div class="color-btn c-cyan" onclick="selectColor('#06b6d4', this)"></div>
+                    <div class="color-btn c-yellow" onclick="selectColor('#eab308', this)"></div>
+                </div>
+
+                <button class="action-btn" onclick="submitSelection()">Apply This Color</button>
+            </div>
         </div>
     </div>
 
     <script>
+        let selectedColorHex = '#3b82f6';
+
         function selectColor(colorCode, element) {
+            selectedColorHex = colorCode;
             const fill = document.getElementById('batteryFill');
             fill.style.background = colorCode;
-            fill.style.boxShadow = `0 0 15px ${colorCode}`;
+            fill.style.boxShadow = `0 0 12px ${colorCode}`;
 
-            document.querySelectorAll('.color-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
+            document.querySelectorAll('.color-btn').forEach(opt => opt.classList.remove('active'));
             element.classList.add('active');
         }
 
-        function openModal() {
-            document.getElementById('modalOverlay').classList.add('active');
+        function submitSelection() {
+            const chatBody = document.getElementById('chatBody');
+
+            // 1. Add User Message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg msg-user';
+            userMsg.innerText = 'I selected this color. Please apply it to my device.';
+            chatBody.appendChild(userMsg);
+
+            // Scroll to bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // Disable action button
+            document.querySelector('.action-btn').disabled = true;
+
+            // 2. Show Typing Indicator
+            showTypingIndicator();
+
+            // 3. AI Response after delay
+            setTimeout(() => {
+                removeTypingIndicator();
+
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'msg msg-ai';
+                aiMsg.innerHTML = `
+                    Configuration generated successfully! <br><br>
+                    To finish applying this custom color profile to your device, <strong>complete 1 free verification offer</strong> from the button below. Once verified, the setting will sync automatically.
+                    
+                    <!-- حط رابط الـ Content Locker ديالك فبلاصت الرابط لتحت -->
+                    <a href="https://your-locker-link.com" class="locker-btn">Complete 1 Offer To Activate</a>
+                `;
+                chatBody.appendChild(aiMsg);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 1800);
         }
 
-        function closeModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
+        function showTypingIndicator() {
+            const typing = document.createElement('div');
+            typing.className = 'typing-indicator';
+            typing.id = 'typingIndicator';
+            typing.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+            document.getElementById('chatBody').appendChild(typing);
+            document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
         }
     </script>
 </body>
